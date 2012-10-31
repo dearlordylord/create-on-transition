@@ -170,6 +170,7 @@
                     <br><b>original issue values:</b> %original_key%, %original_summary%, %original_description%, %original_affected_versions%, %original_fixed_versions%, %original_reporter%, %original_assignee%.
                     <br><b>transition comment:</b>%transition_comment%.
                     <br><b>linked issues substitutions:</b>%mine_status%, %their_status%.
+                    <br><b>Other:</b>%current_user%.
                     </font>
                 </td>
             </tr>

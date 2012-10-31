@@ -8,6 +8,7 @@ import com.atlassian.jira.issue.CustomFieldManager;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.fields.CustomField;
 import com.atlassian.jira.issue.resolution.Resolution;
+import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.util.concurrent.Nullable;
 import org.apache.log4j.Logger;
 import org.swift.jira.cot.functions.CreateUtilities;
@@ -54,6 +55,8 @@ public class ReplaceUtil {
     public static final String MINE_STATUS = "mine_status";
     public static final String THEIR_STATUS = "their_status";
 
+    public static final String CURRENT_USER = "current_user";
+
     private final static Logger log = Logger.getLogger(ReplaceUtil.class);
 
     public static String findReplace(final String inputText, final Issue parentIssue, final Issue originalIssue, @Nullable List<Issue> additional, final Map<String, Object> transientVariables) {
@@ -62,6 +65,7 @@ public class ReplaceUtil {
 
         ApplicationProperties applicationProperties = ComponentAccessor.getApplicationProperties();
         CustomFieldManager customFieldManager = ComponentAccessor.getCustomFieldManager();
+        JiraAuthenticationContext jiraAuthenticationContext = ComponentAccessor.getJiraAuthenticationContext();
 
         StringBuilder result = new StringBuilder();
         String input = inputText == null ? "" : inputText.trim();
@@ -149,6 +153,8 @@ public class ReplaceUtil {
                                 for (Issue add : additional) {
                                     result.append(getWorkStatus(add, true));
                                 }
+                            } else if (name.equalsIgnoreCase(CURRENT_USER)) {
+                                result.append(jiraAuthenticationContext.getLoggedInUser().getDisplayName());
                             } else { // handle field names and method names
                                 String methodName = "";
                                 try {
