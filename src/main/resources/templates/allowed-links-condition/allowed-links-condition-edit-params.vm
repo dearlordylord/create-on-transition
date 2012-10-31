@@ -1,0 +1,210 @@
+<script language="JavaScript">
+function enableControls()
+{
+	if(document.jiraform.projectCondition[3].checked)
+	{
+		document.jiraform.projectKeys.disabled = false;
+		document.jiraform.ignoreOtherProjects.disabled = false;
+	}
+	else
+	{
+		document.jiraform.projectKeys.disabled = true;
+		document.jiraform.ignoreOtherProjects.disabled = true;
+		
+		document.jiraform.projectKeys.value = "";
+		document.jiraform.ignoreOtherProjects.checked = false;
+	}
+}
+</script>
+
+<tr bgcolor="ffffff">    
+    <td align="right" valign="top" bgcolor="ddddee">
+        <b>Inward issue link types:</b>
+    </td>
+    <td bgcolor="eeeeff" nowrap>
+        <table cellpadding="2" cellspacing="2">
+	        #foreach ($issueLinkType in $issueLinkTypes)
+	            <tr>
+	                <td><input type="checkbox" name="inward_$issueLinkType.getId()"
+	                #if (${selectedInwardIssueLinkTypes})
+	                    #if (${selectedInwardIssueLinkTypes.contains($issueLinkType)})
+	                    CHECKED
+	                    #end
+	                #end
+	                ></td>
+	                <td>$issueLinkType.getInward()</td>
+	            </tr>
+	        #end
+        </table>
+        <br><font size="1">Only selected issue link types are allowed.</font>
+    </td>
+</tr>
+
+<tr bgcolor="ffffff"><td></td></tr>
+
+<tr bgcolor="ffffff">    
+    <td align="right" valign="top" bgcolor="ddddee">
+        <b>Outward issue link types:</b>
+    </td>
+    <td bgcolor="eeeeff" nowrap>
+        <table cellpadding="2" cellspacing="2">
+	        #foreach ($issueLinkType in $issueLinkTypes)
+	            <tr>
+	                <td><input type="checkbox" name="outward_$issueLinkType.getId()"
+	                #if (${selectedOutwardIssueLinkTypes})
+	                    #if (${selectedOutwardIssueLinkTypes.contains($issueLinkType)})
+	                    CHECKED
+	                    #end
+	                #end
+	                ></td>
+	                <td>$issueLinkType.getOutward()</td>
+	            </tr>
+	        #end
+        </table>
+        <br><font size="1">Only selected issue link types are allowed.</font>
+        <br><font size="1">If you don't select any inward or outward issue link type and check <i>"Issue link types<br>
+         not selected are allowed"</i>, there won't be applied any filter by issue link type.</font>
+    </td>
+</tr>
+
+<tr bgcolor="ffffff"><td></td></tr>
+
+<tr bgcolor="ffffff">
+    <td align="right" valign="top" bgcolor="ddddee">
+        <b>Issue types for linked issues:</b>
+    </td>
+    <td bgcolor="eeeeff" nowrap>
+        <table cellpadding="2" cellspacing="2">
+	        #foreach ($issueType in $issueTypes)
+	            <tr>
+	                <td><input type="checkbox" name="issueType_$issueType.getId()"
+	                #if (${selectedIssueTypes})
+	                    #if (${selectedIssueTypes.contains($issueType)})
+	                    CHECKED
+	                    #end
+	                #end
+	                ></td>
+	                <td>#displayConstantIcon ($issueType)&nbsp;$issueType.getName()</td>
+	            </tr>
+	        #end
+         </table>
+        <br><font size="1">Only selected issue types are allowed to be linked with current issue.</font>
+        <br><font size="1">If you don't select any issue type and check <i>"Issue types not selected are allowed"</i><br>
+         there won't be applied any filter by issue type.</font>
+    </td>
+</tr>
+
+<tr bgcolor="ffffff"><td></td></tr>
+
+<tr bgcolor="ffffff">
+    <td align="right" valign="top" bgcolor="ddddee">
+        <b>Statuses for linked issues:</b>
+    </td>
+    <td bgcolor="eeeeff" nowrap>
+        <table cellpadding="2" cellspacing="2">
+	        #foreach ($status in $statuses)
+	            <tr>
+	                <td><input type="checkbox" name="status_$status.getId()"
+	                #if (${selectedStatuses})
+	                    #if (${selectedStatuses.contains($status)})
+	                    CHECKED
+	                    #end
+	                #end
+	                ></td>
+	                <td>#displayConstantIcon ($status)&nbsp;$status.getName()</td>
+	            </tr>
+	        #end
+        </table>
+        <br><font size="1">Only linked issues in selected statuses are allowed.</font>
+        <br><font size="1">If you don't select any issue status and check <i>"Statuses not selected are allowed"</i><br>
+         there won't be applied any filter by issue status.</font>  
+    </td>
+</tr>
+
+<tr bgcolor="ffffff"><td></td></tr>
+
+<tr>
+    <td align="right" valign="top" bgcolor="ddddee">
+        <b>Minimum required number of issue links:</b>
+    </td>
+    <td bgcolor="eeeeff" nowrap>
+    	<input type="text" name="minLinks" maxlength="4" size="4" value="$minLinks">
+	</td>
+</tr>
+
+<tr bgcolor="ffffff"><td></td></tr>
+
+<tr>
+    <td align="right" valign="top" bgcolor="ddddee">
+        <b>Maximum allowed number of issue links:</b>
+    </td>
+    <td bgcolor="eeeeff" nowrap>
+    	<input type="text" name="maxLinks" maxlength="4" size="4" value="$maxLinks">
+	</td>
+</tr>
+
+<tr bgcolor="ffffff"><td></td></tr>
+
+<tr bgcolor="ffffff">    
+    <td align="right" valign="top" bgcolor="ddddee">
+        <b>Linked issues belong to:</b>
+    </td>
+    <td bgcolor="eeeeff" nowrap>
+	    <input type="radio" name="projectCondition" value="any" #if($projectCondition == "any") checked #end onClick="enableControls()"> any project<br>
+        <input type="radio" name="projectCondition" value="current" #if($projectCondition == "current") checked #end onClick="enableControls()"> current project<br>
+        <input type="radio" name="projectCondition" value="anyButCurrent" #if($projectCondition == "anyButCurrent") checked #end onClick="enableControls()"> any but current project<br>
+        <input type="radio" name="projectCondition" value="introducedProjects" #if($projectCondition == "introducedProjects") checked #end onClick="enableControls()"> projects introduced<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="projectKeys" maxlength="255" size="60" value="$projectKeys">
+        <br>&nbsp;&nbsp;&nbsp;&nbsp;<font size="1">Introduce a comma separated list of project keys. If you write field codes they will be replaced with its values.</font>
+        <br>&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="ignoreOtherProjects" #if ($ignoreOtherProjects=="true")CHECKED#end> ignore links to issues in other projects
+    </td>
+</tr>
+
+<tr bgcolor="ffffff"><td></td></tr>
+
+<tr>
+    <td align="right" valign="top" bgcolor="ddddee">
+        <b>Issue link types not selected are allowed:</b>
+    </td>
+    <td bgcolor="eeeeff" nowrap>
+        <input type="checkbox" name="restOfLinkTypesAreAllowed"
+	        #if ($restOfLinkTypesAreAllowed=="true")
+	           CHECKED
+	        #end
+        >
+	</td>
+</tr>
+
+<tr bgcolor="ffffff"><td></td></tr>
+
+<tr>
+    <td align="right" valign="top" bgcolor="ddddee">
+        <b>Issue types not selected are allowed:</b>
+    </td>
+    <td bgcolor="eeeeff" nowrap>
+        <input type="checkbox" name="restOfIssueTypesAreAllowed"
+	        #if ($restOfIssueTypesAreAllowed=="true")
+	           CHECKED
+	        #end
+        >
+	</td>
+</tr>
+
+<tr bgcolor="ffffff"><td></td></tr>
+
+<tr>
+    <td align="right" valign="top" bgcolor="ddddee">
+        <b>Statuses not selected are allowed:</b>
+    </td>
+    <td bgcolor="eeeeff" nowrap>
+        <input type="checkbox" name="restOfStatusesAreAllowed"
+	        #if ($restOfStatusesAreAllowed=="true")
+	           CHECKED
+	        #end
+        >
+	</td>
+</tr>
+
+<script language="JavaScript">
+	enableControls();
+</script>

@@ -1,0 +1,53 @@
+<atlassian-plugin key="org.swift.jira.cot" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <application-version min="${atlassian.product.version}" max="${atlassian.product.max-version}"/>
+        <vendor name="${project.organization.name}" url="${project.organization.url}"/>
+    </plugin-info>
+
+    <component-import key="workflow-traveller" interface="ru.megaplan.jira.plugins.workflow.util.traveller.WorkflowTraveller"/>
+
+    <customfield-type key="Ignorance" name="Ignorance field"
+                      class="ru.megaplan.jira.plugins.customfield.IgnoranceNotificationCFType">
+        <resource type="velocity" name="view" location="templates/plugins/fields/view/view-basictext.vm"/>
+        <resource type="velocity" name="column-view" location="templates/plugins/fields/view/view-limited-text.vm"/>
+        <resource type="velocity" name="edit" location="templates/customfields/edit/readonly-basictext.vm"/>
+        <resource type="velocity" name="xml" location="templates/plugins/fields/xml/xml-basictext.vm"/>
+    </customfield-type>
+
+    <workflow-condition key="allowed-links-condition" name="Condition on linked issues" class="ru.megaplan.jira.plugins.workflow.condition.AllowedLinksConditionFactory">
+        <description>Condition on issue links (issue link type, issue type, issue status, number of linked issues and project membership).</description>
+        <condition-class>ru.megaplan.jira.plugins.workflow.condition.AllowedLinksCondition</condition-class>
+        <resource type="velocity" name="view" location="templates/allowed-links-condition/allowed-links-condition-view.vm"/>
+        <resource type="velocity" name="input-parameters" location="templates/allowed-links-condition/allowed-links-condition-input-params.vm"/>
+        <resource type="velocity" name="edit-parameters" location="templates/allowed-links-condition/allowed-links-condition-edit-params.vm"/>
+    </workflow-condition>
+
+    <workflow-function key="createsubissue-function" name="Create sub-task on transition"
+               class="org.swift.jira.cot.functions.CreateSubIssueFunctionPluginFactory">
+        <description>Creates a sub-task on transition between two workflow steps.</description>
+        <function-class>org.swift.jira.cot.functions.CreateSubIssueFunction</function-class>
+        <orderable>true</orderable>
+        <unique>false</unique>
+        <deletable>true</deletable>
+        <default>false</default>
+        <resource type="velocity" name="view" location="templates/functions/createsubissue-function-view.vm" />
+        <resource type="velocity" name="input-parameters" location="templates/functions/createsubissue-function-input-params.vm" />
+        <resource type="velocity" name="edit-parameters" location="templates/functions/createsubissue-function-edit-params.vm" />
+    </workflow-function>
+
+    <workflow-function key="actionwithlinked-function" name="Action with linked issues"
+                       class="org.swift.jira.cot.functions.ActionWithLinkedIssuesFunctionPluginFactory">
+        <description>Execute some actions with linked issues.</description>
+        <function-class>org.swift.jira.cot.functions.ActionWithLinkedIssuesFunction</function-class>
+        <orderable>true</orderable>
+        <unique>false</unique>
+        <deletable>true</deletable>
+        <default>false</default>
+        <resource type="velocity" name="view" location="templates/functions/actionwithlinked-function-view.vm" />
+        <resource type="velocity" name="input-parameters" location="templates/functions/actionwithlinked-function-input-params.vm" />
+        <resource type="velocity" name="edit-parameters" location="templates/functions/actionwithlinked-function-edit-params.vm" />
+    </workflow-function>
+
+</atlassian-plugin>

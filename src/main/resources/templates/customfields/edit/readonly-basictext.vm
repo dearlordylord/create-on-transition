@@ -1,0 +1,10 @@
+#disable_html_escaping()
+#if ($value)
+    #customControlHeader ($action $customField.id $customField.name $fieldLayoutItem.required $displayParameters $auiparams)
+      #if (${displayParameters.excel_view})
+        $textutils.br($textutils.htmlEncode($!value.toString(), false))
+      #else
+        #if ($values) $action.addErrorMessages($values) #end
+      #end
+    #customControlFooter ($action $customField.id $fieldLayoutItem.fieldDescription $displayParameters $auiparams)
+#end

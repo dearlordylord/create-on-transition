@@ -1,0 +1,146 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.swift.jira</groupId>
+    <artifactId>create-on-transition-plugin</artifactId>
+    <version>2.3.0</version>
+
+    <name>JIRA Create on Transition Plugin</name>
+    <description>Workflow transition post functions to create JIRA subtasks.</description>
+    <packaging>atlassian-plugin</packaging>
+
+    <properties>
+        <atlassian.plugin.key>org.swift.jira.cot</atlassian.plugin.key>
+        <atlassian.product.version>5.1</atlassian.product.version> <!-- only use major versions -->
+        <atlassian.product.max-version>5.1</atlassian.product.max-version>
+        <product.version>5.1</product.version>
+        <product.data.version>5.1</product.data.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <amps.version>3.9.3</amps.version>
+    </properties>
+
+    <organization>
+        <name>Bob Swift</name>
+        <url>sad</url>
+    </organization>
+
+    <developers>
+        <developer>
+        <name>Bob Swift</name>
+            <id>bswift</id>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Paul Rene Jørgensen</name>
+            <id>pauljørgensen</id>
+            <organization>Telenor</organization>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Justin Koke</name>
+            <id>justin</id>
+            <email>justin@atlassian.com</email>
+            <organization>Atlassian</organization>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Amit Khullar</name>
+            <organization>Telenor</organization>
+        </developer>
+        <developer>
+            <name>Samuel John</name>
+            <organization>Telenor</organization>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:hg:https://bitbucket.org/bob_swift/jira-create-on-transition-plugin</connection>
+        <developerConnection>scm:hg:https://bitbucket.org/bob_swift/jira-create-on-transition-plugin</developerConnection>
+    </scm>
+
+   <licenses>
+        <license>
+            <name>Apache License 2.0</name>
+            <distribution>http://www.opensource.org/licenses/apache2.0.php</distribution>
+            <comments>
+                 Copyright (c) 2006, 2011, Bob Swift and other contributors.  All rights reserved.
+            </comments>
+            <url>https://studio.plugins.atlassian.com/wiki/x/pQB2Ag</url>
+        </license>
+    </licenses>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.atlassian.jira</groupId>
+            <artifactId>atlassian-jira</artifactId>
+            <version>${atlassian.product.version}</version>
+            <!-- <scope>compile</scope>  -->
+            <scope>provided</scope>
+
+        </dependency>
+
+        <dependency>
+            <groupId>ru.megaplan.jira.plugins</groupId>
+            <artifactId>jira-workflow-traveller</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                      <source>1.6</source>
+                      <target>1.6</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.atlassian.maven.plugins</groupId>
+                <artifactId>maven-jira-plugin</artifactId>
+                <version>${amps.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <productVersion>${product.version}</productVersion>
+                    <productDataVersion>${product.data.version}</productDataVersion>
+                    <jvmArgs>-Dfile.encoding=UTF-8</jvmArgs>
+                    <pluginArtifacts>
+                        <pluginArtifact>
+                            <groupId>ru.megaplan.jira.plugins</groupId>
+                            <artifactId>jira-workflow-traveller</artifactId>
+                            <version>1.0-SNAPSHOT</version>
+                        </pluginArtifact>
+                    </pluginArtifacts>
+                </configuration>
+            </plugin>
+
+        </plugins>
+
+    </build>
+
+    <repositories>
+        <repository>
+            <id>atlassian-maven2</id>
+            <name>Jira maven2 repository</name>
+            <url>http://repository.atlassian.com/maven2</url>
+        </repository>
+        <repository>
+            <id>atlassian-maven1</id>
+            <name>Jira maven2 repository</name>
+            <url>https://maven.atlassian.com/maven1</url>
+        </repository>
+    </repositories>
+
+</project>

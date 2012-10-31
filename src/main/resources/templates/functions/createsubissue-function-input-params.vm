@@ -1,0 +1,473 @@
+## Copyright (c) 2006, 2012 Bob Swift and other contributors
+##
+## Licensed under the Apache License, Version 2.0 (the "License");
+## you may not use this file except in compliance with the License.
+## You may obtain a copy of the License at
+##
+##     http://www.apache.org/licenses/LICENSE-2.0
+##
+## Unless required by applicable law or agreed to in writing, software
+## distributed under the License is distributed on an "AS IS" BASIS,
+## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+## See the License for the specific language governing permissions and
+## limitations under the License.
+##
+
+<!-- Used for add (create) -->
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Sub-task type:</span>
+    </td>
+
+    <td valign="top" bgcolor="ffffff" nowrap>
+        <table>
+            </tr>
+                <td nowrap>
+                    <select name="subIssueTypeId">
+                        #foreach ($subIssueType in $subIssueTypes)
+                            <option value="$subIssueType.getId()"/>$subIssueType.getName()
+                        #end
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Create sibbling for subtask issues:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            </tr>
+                <td nowrap>
+                    <radio>
+                        <input type="radio" name="createSibbling" value="1">&nbsp; Yes, create sibbling if parent is a subtask.<br>
+                        <input type="radio" name="createSibbling" value="0" CHECKED>&nbsp; No, ignore if parent is a subtask.
+                    </radio>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Link with parent issue:</span>
+    </td>
+
+    <td valign="top" bgcolor="ffffff" nowrap>
+        <table>
+            </tr>
+                <td nowrap>
+                    <select name="issueLinkTypeId">
+                        <option value="0">None</option>
+                        #foreach ($issueLinkType in $issueLinkTypes)
+                            <option value="$issueLinkType.getId()"/>$issueLinkType.getName()
+                        #end
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Issue link direction:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            </tr>
+                <td nowrap>
+                    <radio>
+                        <input type="radio" name="issueLinkDirection" value="0" CHECKED> &nbsp; Parent->Child<br>
+                        <input type="radio" name="issueLinkDirection" value="1"> &nbsp; Child->Parent
+                    </radio>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Sub-task priority:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            </tr>
+                <td nowrap>
+                    <select name="subIssuePriorityId">
+                        <option value="0"/>Parent's priority
+                        #foreach ($subIssuePri in $subIssuePriorities)
+                            <option value="$subIssuePri.getId()"/>$subIssuePri.getName()
+                        #end
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Sub-task reporter:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            <tr>
+                <td valign="top" nowrap>
+                    <select name="subIssueReporter" style="width: 240px">
+                        <option value="5" #if ($currentSubIssueReporter == 5) selected #end/>Current user
+                        <option value="0" #if ($currentSubIssueReporter == 0) selected #end/>Parent issue's reporter
+                        <option value="1" #if ($currentSubIssueReporter == 1) selected #end/>Parent issue's assignee
+                        <option value="2" #if ($currentSubIssueReporter == 2) selected #end/>Project lead
+                        <option value="3" #if ($currentSubIssueReporter == 3) selected #end/>Unassigned
+                        <option value="4" #if ($currentSubIssueReporter == 4) selected #end/>Specific user
+                    </select>
+                </td>
+
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <input type="text" name="specificReporter" value=""/>
+                    <br><font size="1">Specific reporter.
+                    </font>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Sub-task assignee:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            <tr>
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <select name="subIssueAssignee" style="width: 240px">
+                        <option value="5" #if ($currentSubIssueAssignee == 5) selected #end/>Current user
+                        <option value="0" #if ($currentSubIssueAssignee == 0) selected #end/>Parent issue's reporter
+                        <option value="1" #if ($currentSubIssueAssignee == 1) selected #end/>Parent issue's assignee
+                        <option value="2" #if ($currentSubIssueAssignee == 2) selected #end/>Project lead
+                        <option value="3" #if ($currentSubIssueAssignee == 3) selected #end/>Unassigned
+                        <option value="4" #if ($currentSubIssueAssignee == 4) selected #end/>Specific user
+                    </select>
+                </td>
+
+                <td bgcolor="ffffff" nowrap>
+                    <input type="text" name="specificAssignee" value=""/>
+                    <br><font size="1">Specific assignee.
+                    </font>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Sub-task affected versions:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            <tr>
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <select name="subIssueAffectedVersions" style="width: 240px">
+                        <option value="0" #if ($currentSubIssueAffectedVersions == 0) selected #end/>None
+                        <option value="1" #if ($currentSubIssueAffectedVersions == 1) selected #end/>Parent issue's affected versions
+                        <option value="2" #if ($currentSubIssueAffectedVersions == 2) selected #end/>Parent issue's fixed versions
+                        <option value="3" #if ($currentSubIssueAffectedVersions == 3) selected #end/>Specific versions
+                    </select>
+                </td>
+
+                <td bgcolor="ffffff" nowrap>
+                    <input type="text" name="specificAffectedVersions" value=""/>
+                    <br><font size="1">Specific affected versions. Comma separated list. Invalid versions will be ignored.
+                    </font>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Sub-task fixed versions:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            <tr>
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <select name="subIssueFixedVersions" style="width: 240px">
+                        <option value="0" #if ($currentSubIssueFixedVersions == 0) selected #end/>None
+                        <option value="1" #if ($currentSubIssueFixedVersions == 1) selected #end/>Parent issue's affected versions
+                        <option value="2" #if ($currentSubIssueFixedVersions == 2) selected #end/>Parent issue's fixed versions
+                        <option value="3" #if ($currentSubIssueFixedVersions == 3) selected #end/>Specific versions
+                    </select>
+                </td>
+
+                <td bgcolor="ffffff" nowrap>
+                    <input type="text" name="specificFixedVersions" value=""/>
+                    <br><font size="1">Specific fixed versions. Comma separated list. Invalid versions will be ignored.
+                    </font>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Sub-task components:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            <tr>
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <select name="subIssueComponents" style="width: 240px">
+                        <option value="0" #if ($currentSubIssueComponents == 0) selected #end/>None
+                        <option value="1" #if ($currentSubIssueComponents == 1) selected #end/>Parent issue's components
+                        <option value="3" #if ($currentSubIssueComponents == 3) selected #end/>Specific components
+                    </select>
+                </td>
+
+                <td bgcolor="ffffff" nowrap>
+                    <input type="text" name="specificComponents" value=""/>
+                    <br><font size="1">Specific components. Comma separated list. Invalid components will be ignored.
+                    </font>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Sub-task due date:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            <tr>
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <select name="subIssueDueDate" style="width: 240px">
+                        <option value="0" #if ($currentSubIssueDueDate == 0) selected #end/>None
+                        <option value="1" #if ($currentSubIssueDueDate == 1) selected #end/>Parent issue's due date
+                        <option value="2" #if ($currentSubIssueDueDate == 2) selected #end/>Specific due date
+                    </select>
+                </td>
+
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <input type="text" name="specificDueDate" value=""/>
+                    <br><font size="1">Specific due date ($dateFormat).
+                    </font>
+                </td>
+
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <input type="text" name="dueDateOffset" value=""/>
+                    <br><font size="1">Due date offset in days.
+                    </font>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Sub-task original estimate:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            <tr>
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <input type="text" name="subIssueOriginalEstimate" value=""/>
+                    <br><font size="1">Original estimate in system default duration format (like ${timeDurationFormat}).
+                    </font>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Sub-task summary:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            <tr>
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <input type="text" size="120" name="subIssueSummary" value=""/>
+                    <br><font size="1">The summary field of the sub-task to create.
+                    </font>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Sub-task description:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            <tr>
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <textarea rows="5" cols="150" name="subIssueDescription"></textarea>
+                    <br><font size="1">The description field of the sub-task to create.
+                    </font>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Parent custom fields to copy:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            <tr>
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <input type="text" size="120" name="copyParentFields" value=""/>
+                    <br><font size="1">Parent custom fields to copy to subtask (comma seprated list of names or ids, use id if name contains a comma)
+                    </font>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<!-- Set custom field 1 -->
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Set sub-task custom field:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            <tr>
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <input type="text" name="customField1Name" value=""/>
+                    <br><font size="1">Custom field name or id. Valid fields types include: text, date, user, version.
+                    </font>
+                </td>
+
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <input type="text" name="customField1Value1" value=""/>
+                    <br><font size="1">Custom field value.
+                    </font>
+                </td>
+
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <input type="text" name="customField1Value2" value=""/>
+                    <br><font size="1">Custom field type specific value. Date field - offset in days.
+                    </font>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<!-- Set custom field 2 -->
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Set sub-task custom field:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            <tr>
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <input type="text" name="customField2Name" value=""/>
+                    <br><font size="1">Custom field name or id. Valid fields types include: text, date, user, version.
+                    </font>
+                </td>
+
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <input type="text" name="customField2Value1" value=""/>
+                    <br><font size="1">Custom field value.
+                    </font>
+                </td>
+
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <input type="text" name="customField2Value2" value=""/>
+                    <br><font size="1">Custom field type specific value. Date field - offset in days.
+                    </font>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<!-- Set custom field 3 -->
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Set sub-task custom field:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            <tr>
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <input type="text" name="customField3Name" value=""/>
+                    <br><font size="1">Custom field name or id. Valid fields types include: text, date, user, version.
+                    </font>
+                </td>
+
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <input type="text" name="customField3Value1" value=""/>
+                    <br><font size="1">Custom field value.
+                    </font>
+                </td>
+
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <input type="text" name="customField3Value2" value=""/>
+                    <br><font size="1">Custom field type specific value. Date field - offset in days.
+                    </font>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Special substitution variables:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            <tr>
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <font size="2">
+                    <b>parent issue values:</b> %parent_key%, %parent_summary%, %parent_description%, %parent_affected_versions%, %parent_fixed_versions%.
+                    <br><b>parent issue field values like:</b> %components%, %resolution%, %reporterId%, %dueDate%, %resolution%, %originalEstimate%, %timeSpent%, %id%, ...
+                    <br><b>parent issue custom field values:</b> %somecustomfieldname%.
+                    <br><b>original issue values:</b> %original_key%, %original_summary%, %original_description%, %original_affected_versions%, %original_fixed_versions%, %original_reporter%, %original_assignee%.
+                    <br><b>transition comment:</b>%transition_comment%.
+                    </font>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>

@@ -1,0 +1,179 @@
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">With linked:</span>
+    </td>
+
+    <td valign="top" bgcolor="ffffff" nowrap>
+        <table>
+            </tr>
+                <td nowrap>
+                    <select name="issueLinkTypeId">
+                        <option value="0" #if (!$currentIssueTypeId || $currentIssueTypeId == "0") selected #end/> None
+                        #foreach ($issueLinkType in $issueLinkTypes)
+                            <option value="$issueLinkType.getId()" #if ($currentIssueLinkTypeId == $issueLinkType.getId()) selected #end/>$issueLinkType.getName()
+                        #end
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Link direction:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            </tr>
+                <td nowrap>
+                    <radio>
+                        <input type="radio" name="issueLinkDirection" value="0" #if (!$currentIssueLinkDirection || $currentIssueLinkDirection == "0") CHECKED #end> &nbsp; Parent->Child<br>
+                        <input type="radio" name="issueLinkDirection" value="1" #if ($currentIssueLinkDirection == "1") CHECKED #end> &nbsp; Child->Parent
+                    </radio>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Add some comment:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            <tr>
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <input type="text" size="120" name="linkedIssueComment" value="$currentLinkedIssueComment"/>
+                    <br><font size="1">Add comment to linked issues.
+                    </font>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Where to add comment:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            </tr>
+                <td nowrap>
+                    <radio>
+                        <input type="radio" name="issueCommentDirection" value="0" #if (!$currentIssueCommentDirection || $currentIssueCommentDirection == "0") CHECKED #end> &nbsp; Me<br>
+                        <input type="radio" name="issueCommentDirection" value="1" #if ($currentIssueCommentDirection == "1") CHECKED #end> &nbsp; They
+                    </radio>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Comment user:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            <tr>
+                <td valign="top" nowrap>
+                    <select name="commentUser" style="width: 240px">
+                        <option value="5" #if ($currentCommentUser == 5) selected #end/>Current user
+                        <option value="0" #if ($currentCommentUser == 0) selected #end/>Parent issue's reporter
+                        <option value="1" #if ($currentCommentUser == 1) selected #end/>Parent issue's assignee
+                        <option value="2" #if ($currentCommentUser == 2) selected #end/>Project lead
+                        <option value="3" #if ($currentCommentUser == 3) selected #end/>Unassigned
+                        <option value="4" #if ($currentCommentUser == 4) selected #end/>Specific user
+                    </select>
+                </td>
+
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <input type="text" name="specificCommentUser" value="$currentSpecificCommentUser"/>
+                    <br><font size="1">Specific comment user.
+                    </font>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Move to status:</span>
+    </td>
+
+    <td valign="top" bgcolor="ffffff" nowrap>
+        <table>
+            </tr>
+                <td nowrap>
+                    <select name="linkedIssueMoveStatus">
+                        <option value="0" #if (!$currentLinkedIssueMoveStatus || $currentLinkedIssueMoveStatus == "0") selected #end/> None
+                        #foreach ($status in $statuses)
+                            <option value="$status.getId()" #if ($currentLinkedIssueMoveStatus == $status.getId()) selected #end/>$status.getName()
+                        #end
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Move user:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            <tr>
+                <td valign="top" nowrap>
+                    <select name="moveUser" style="width: 240px">
+                        <option value="5" #if ($currentMoveUser == 5) selected #end/>Current user
+                        <option value="0" #if ($currentMoveUser == 0) selected #end/>Parent issue's reporter
+                        <option value="1" #if ($currentMoveUser == 1) selected #end/>Parent issue's assignee
+                        <option value="2" #if ($currentMoveUser == 2) selected #end/>Project lead
+                        <option value="3" #if ($currentMoveUser == 3) selected #end/>Unassigned
+                        <option value="4" #if ($currentMoveUser == 4) selected #end/>Specific user
+                    </select>
+                </td>
+
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <input type="text" name="specificMoveUser" value="$currentSpecificMoveUser"/>
+                    <br><font size="1">Specific move user.
+                    </font>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Special substitution variables:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            <tr>
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <font size="2">
+                    <b>parent issue values:</b> %parent_key%, %parent_summary%, %parent_description%, %parent_affected_versions%, %parent_fixed_versions%.
+                    <br><b>parent issue field values like:</b> %components%, %resolution%, %reporterId%, %dueDate%, %resolution%, %originalEstimate%, %timeSpent%, %id%, ...
+                    <br><b>parent issue custom field values:</b> %somecustomfieldname%.
+                    <br><b>original issue values:</b> %original_key%, %original_summary%, %original_description%, %original_affected_versions%, %original_fixed_versions%, %original_reporter%, %original_assignee%.
+                    <br><b>transition comment:</b>%transition_comment%.
+                    <br><b>linked issues substitutions:</b>%mine_status%, %their_status%.
+                    </font>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+

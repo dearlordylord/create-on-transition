@@ -1,0 +1,73 @@
+<u>Condition on linked issue:</u><br>
+Allowed inward issue link types:
+#if($selectedInwardIssueLinkTypes.size()>0)
+	#foreach ($issueLinkType in $selectedInwardIssueLinkTypes)<b>$issueLinkType.getInward()</b>#if($velocityCount != $selectedInwardIssueLinkTypes.size())#if($velocityCount == ($selectedInwardIssueLinkTypes.size() - 1))&nbsp;and&nbsp;#else,&nbsp;#end#else.#end#end
+#elseif($selectedInwardIssueLinkTypes.size() == 0 && $restOfLinkTypesAreAllowed=="true")
+ <b>any</b>
+#elseif($selectedInwardIssueLinkTypes.size() == 0 && $restOfLinkTypesAreAllowed=="false")
+ <span style="color:#FF0000"><b>none</b></span>
+#end
+<br>
+Allowed outward issue link types:
+#if($selectedOutwardIssueLinkTypes.size()>0)
+	#foreach ($issueLinkType in $selectedOutwardIssueLinkTypes)<b>$issueLinkType.getOutward()</b>#if($velocityCount != $selectedOutwardIssueLinkTypes.size())#if($velocityCount == ($selectedOutwardIssueLinkTypes.size() - 1))&nbsp;and&nbsp;#else,&nbsp;#end#else.#end#end
+#elseif($selectedOutwardIssueLinkTypes.size() == 0 && $restOfLinkTypesAreAllowed=="true")
+ <b>any</b>
+#elseif($selectedOutwardIssueLinkTypes.size() == 0 && $restOfLinkTypesAreAllowed=="false")
+ <span style="color:#FF0000"><b>none</b></span>
+#end
+<br>
+Allowed issue types:
+#if($selectedIssueTypes.size()>0)
+	#foreach ($issueType in $selectedIssueTypes)<b>$issueType.getName()</b>#if($velocityCount != $selectedIssueTypes.size())#if($velocityCount == ($selectedIssueTypes.size() - 1))&nbsp;and&nbsp;#else,&nbsp;#end#else.#end#end
+#elseif($selectedIssueTypes.size() == 0 && $restOfIssueTypesAreAllowed=="true")
+ <b>any</b>
+#elseif($selectedIssueTypes.size() == 0 && $restOfIssueTypesAreAllowed=="false")
+ <span style="color:#FF0000"><b>none</b></span>
+#end
+<br>
+Allowed issue statuses:
+#if($selectedStatuses.size()>0)
+	#foreach ($status in $selectedStatuses)<b>$status.getName()</b>#if($velocityCount != $selectedStatuses.size())#if($velocityCount == ($selectedStatuses.size() - 1))&nbsp;and&nbsp;#else,&nbsp;#end#else.#end#end
+#elseif($selectedStatuses.size() == 0 && $restOfStatusesAreAllowed=="true")
+ <b>any</b>
+#elseif($selectedStatuses.size() == 0 && $restOfStatusesAreAllowed=="false")
+ <span style="color:#FF0000"><b>none</b></span>
+#end
+<br>
+Minimum number of issue links required:&nbsp;<b>$minLinks</b>
+<br>
+Maximum number of issue links allowed:&nbsp;<b>$maxLinks</b>
+<br>
+#if ($projectCondition=="any")
+Linked issues can belong to <b>any</b> project.
+#elseif  ($projectCondition=="current")
+Linked issues must belong to <b>same project</b> as current issue.
+#elseif  ($projectCondition=="anyButCurrent")
+Linked issues can belong to <b>to any but current issue's project</b>.
+#elseif  ($projectCondition=="introducedProjects")
+Linked issues must belong to any of the projects with keys: <b>$projectKeysWithReplacedNames</b>
+	#if ($ignoreOtherProjects=="true")
+		&nbsp;&nbsp;<font size="1">(Links to issues in any other projects <b>will be ignored</b>.)</font>
+	#end 
+#else
+<span style="color:#FF0000"><b>ERROR: Bad option in project condition. Please notify a bug or install a more recent version of JIRA Workflow Toolbox.</b></span>
+#end
+<br>
+#if ($restOfLinkTypesAreAllowed=="true")
+Issue link types not selected are <b>allowed</b>.
+#else
+Issue link types not selected are <b>not allowed</b>.
+#end
+<br>
+#if ($restOfIssueTypesAreAllowed=="true")
+Issue types not selected are <b>allowed</b>.
+#else
+Issue types not selected are <b>not allowed</b>.
+#end
+<br>
+#if ($restOfStatusesAreAllowed=="true")
+Statuses not selected are <b>allowed</b>.
+#else
+Statuses not selected are <b>not allowed</b>.
+#end

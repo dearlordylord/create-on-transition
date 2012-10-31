@@ -1,0 +1,6 @@
+#if (${issueLinkTypeName}) <br>Action with linked tasks: <b>${issueLinkTypeName}</b> : <b>#if(${issueLinkDirection} == "0") Parent->Child #else Child->Parent #end </b> #end
+<br>Where comment: <b>${linkedIssueComment}</b>.
+<br>Comment direction will be: <b>${issueCommentDirection}</b>.
+<br>Comment user: <b>${commentUser}</b>.
+<br>Move linked issue to status: <b>${linkedIssueMoveStatus}</b>
+<br>Move user: <b>${moveUser}</b>
