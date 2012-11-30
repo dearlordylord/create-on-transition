@@ -47,7 +47,7 @@
         <table>
             <tr>
                 <td bgcolor="ffffff" valign="top" nowrap>
-                    <input type="text" size="120" name="linkedIssueComment"/>
+                    <textarea size="120" name="linkedIssueComment"></textarea>
                     <br><font size="1">Add comment to linked issues.
                     </font>
                 </td>
@@ -147,6 +147,24 @@
                 <td bgcolor="ffffff" valign="top" nowrap>
                     <input type="text" name="specificMoveUser" value=""/>
                     <br><font size="1">Specific move user.
+                    </font>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Jql filter:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            <tr>
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <textarea size="120" name="jqlFilter"></textarea>
+                    <br><font size="1">Jql filter on linked issues.
                     </font>
                 </td>
             </tr>

@@ -153,6 +153,7 @@ public class ReplaceUtil {
                                 for (Issue add : additional) {
                                     result.append(getWorkStatus(add, true));
                                 }
+                                log.warn("result after theirstatus : " + result.toString());
                             } else if (name.equalsIgnoreCase(CURRENT_USER)) {
                                 result.append(jiraAuthenticationContext.getLoggedInUser().getDisplayName());
                             } else { // handle field names and method names
@@ -197,8 +198,7 @@ public class ReplaceUtil {
         else if (showPositive) {
             boolean positive = true;
             message = getResolutionMessage(i, positive, showSigns);
-        }
-        else message = "";
+        } else message = "";
         return message;
     }
 
@@ -214,6 +214,9 @@ public class ReplaceUtil {
         resolutionStatusTemplates.put("CodeReview", "Код-ревью истории не выполнен");
         resolutionStatusTemplates.put("IntegrTest", "Интеграционное тестирование истории не выполнено");
         resolutionStatusTemplates.put("CreateTechDocument", "Техническая документация не подготовлена");
+        resolutionStatusTemplates.put("CreateTechDocumentMB", "Техническая документация не подготовлена");
+        resolutionStatusTemplates.put("CodeReviewMB", "Код ревью не готов");
+        resolutionStatusTemplates.put("Вопрос", "Не получен ответ");
         resolutionStatusTemplates.put(null, "Отрицательная или отсутствующая резолюция");
 
         goodResolutionStatusTemplates.put("ProductOwnerReview", "Продуктовый департамент историю проверил и принял");
@@ -224,6 +227,9 @@ public class ReplaceUtil {
         goodResolutionStatusTemplates.put("CodeReview", "Код-ревью истории выполнен");
         goodResolutionStatusTemplates.put("IntegrTest", "Интеграционное тестирование истории выполнено");
         goodResolutionStatusTemplates.put("CreateTechDocument", "Техническая документация подготовлена");
+        goodResolutionStatusTemplates.put("CreateTechDocumentMB", "Техническая документация подготовлена");
+        goodResolutionStatusTemplates.put("CodeReviewMB", "Код ревью готов");
+        goodResolutionStatusTemplates.put("Вопрос", "Ответ получен");
         goodResolutionStatusTemplates.put(null, "Положительная резолюция");
 
     }

@@ -1,0 +1,55 @@
+$!ctx
+
+$!context
+<table>
+    <tbody>
+        <tr>
+            <td align="right" valign="top" bgcolor="ddddee">
+                <b>Jql:</b>
+            </td>
+            <td bgcolor="eeeeff" nowrap>
+                <textarea name="jql">$!jql</textarea>
+            </td>
+        </tr>
+
+        <tr bgcolor="ffffff"><td></td></tr>
+
+        <tr>
+            <td align="right" valign="top" bgcolor="ddddee">
+                <b>Min results:</b>
+            </td>
+            <td bgcolor="eeeeff" nowrap>
+                <input type="text" name="min" maxlength="4" size="4" value="$!min">
+            </td>
+        </tr>
+
+        <tr>
+            <td align="right" valign="top" bgcolor="ddddee">
+                <b>Max results:</b>
+            </td>
+            <td bgcolor="eeeeff" nowrap>
+                <input type="text" name="max" maxlength="4" size="4" value="$!max">
+            </td>
+        </tr>
+
+        <tr bgcolor="ffffff"><td></td></tr>
+
+        <tr>
+            <td align="right" valign="top" bgcolor="ddddee">
+                <b>Error message:</b>
+            </td>
+            <td bgcolor="eeeeff" nowrap>
+                <input type="text" name="error" value="$!error">
+            </td>
+        </tr>
+
+        <tr>
+            <td align="right" valign="top" bgcolor="ddddee">
+                <b>Ignored roles:</b>
+            </td>
+            <td bgcolor="eeeeff" nowrap>
+                <input type="text" name="ignoredroles" value="$!ignoredroles">
+            </td>
+        </tr>
+    </tbody>
+</table>

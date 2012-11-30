@@ -21,18 +21,17 @@ import java.lang.reflect.Method;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
+import com.atlassian.jira.bc.issue.search.SearchService;
 import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.issue.fields.config.manager.FieldConfigSchemeManager;
 import com.atlassian.jira.issue.issuetype.IssueType;
+import com.atlassian.jira.issue.link.IssueLink;
 import com.atlassian.jira.issue.link.IssueLinkManager;
+import com.atlassian.jira.issue.search.SearchException;
+import com.atlassian.jira.issue.search.searchers.IssueSearcher;
+import com.atlassian.jira.web.bean.PagerFilter;
 import com.opensymphony.workflow.spi.Step;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -112,11 +111,12 @@ public class CreateSubIssueFunction extends AbstractJiraFunctionProvider {
     protected final EventPublisher eventPublisher;
     protected final IssueLinkManager issueLinkManager;
     private final FieldConfigSchemeManager schemeManager;
+    private final SearchService searchService;
 
     public CreateSubIssueFunction(final CustomFieldManager customFieldManager, final SubTaskManager subTaskManager, final IssueManager issueManager,
                                   final IssueFactory issueFactory, final ConstantsManager constantsManager, final ApplicationProperties applicationProperties,
                                   final UserUtil userUtil, final JiraAuthenticationContext authenticationContext, final I18nHelper.BeanFactory i18nBeanFactory,
-                                  final EventPublisher eventPublisher, IssueLinkManager issueLinkManager, FieldConfigSchemeManager schemeManager) {
+                                  final EventPublisher eventPublisher, IssueLinkManager issueLinkManager, FieldConfigSchemeManager schemeManager, SearchService searchService) {
         this.customFieldManager = customFieldManager;
         this.subTaskManager = subTaskManager;
         this.issueManager = issueManager;
@@ -129,6 +129,7 @@ public class CreateSubIssueFunction extends AbstractJiraFunctionProvider {
         this.eventPublisher = eventPublisher;
         this.issueLinkManager = issueLinkManager;
         this.schemeManager = schemeManager;
+        this.searchService = searchService;
     }
 
     @Override
@@ -148,6 +149,28 @@ public class CreateSubIssueFunction extends AbstractJiraFunctionProvider {
 
         Issue originalIssue = getIssue(transientVariables); // issue that initiated the workflow action
         Issue parentIssue = originalIssue; // parent of subtask normally is the initiating issue, may be adjusted later
+
+        final String notPerformJql = args.get("field.notPerformIfJql");
+        log.warn("notPerformJql : " + notPerformJql);
+        if (notPerformJql != null && !notPerformJql.isEmpty()) {
+            final String npJqlParsed = findReplace(notPerformJql, parentIssue, originalIssue, null, transientVariables);
+            log.warn("parsed jql : " + npJqlParsed);
+            SearchService.ParseResult parseResult = searchService.parseQuery(authenticationContext.getLoggedInUser(), npJqlParsed);
+            if (!parseResult.isValid()) {
+                String err = "not valid jql notperform query : " + npJqlParsed + " for issue : " + originalIssue.getKey() + " : " + parseResult.getErrors().getErrorMessages();
+                log.error(err);
+                throw new RuntimeException(err);
+            }
+            try {
+                long count = searchService.searchCount(authenticationContext.getLoggedInUser(), parseResult.getQuery());
+                if (count > 0) return;
+            } catch (SearchException e) {
+                String err = "can't perform jql search";
+                log.error(err,e);
+                throw new RuntimeException("can't perform jql search", e);
+            }
+        }
+
 
         Step createdStep =(Step) transientVariables.get("createdStep");
         List<? extends Step> currentSteps = (List<? extends Step>) transientVariables.get("currentSteps");
@@ -256,30 +279,24 @@ public class CreateSubIssueFunction extends AbstractJiraFunctionProvider {
             Issue subTask = issueManager.createIssueObject(authenticationContext.getLoggedInUser(), params);
             if (issueObject.getIssueTypeObject().isSubTask())
                 subTaskManager.createSubTaskIssueLink(parentIssue, subTask, authenticationContext.getLoggedInUser());
-            final String issueLinkTypeId = args.get("field.issueLinkTypeId");
-            if (issueLinkTypeId != null && !"0".equals(issueLinkTypeId)) {
-                Issue from = null;
-                Issue to = null;
+            final String issueLinkTypeIdS = args.get("field.issueLinkTypeId");
+            if (issueLinkTypeIdS != null && !"0".equals(issueLinkTypeIdS)) {
+
                 int direction = CreateUtilities.getInt(args.get("field.issueLinkDirection"), 0);
+                Direction dir;
                 if (direction == 0) {
-                    from = parentIssue;
-                    to = subTask;
+                    dir = Direction.To;
                 } else {
-                    from = subTask;
-                    to = parentIssue;
+                    dir = Direction.From;
                 }
-                final Issue ffrom = from;
-                final Issue fto = to;
-                Runnable createLink = new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            issueLinkManager.createIssueLink(ffrom.getId(), fto.getId(), Long.parseLong(issueLinkTypeId), 0L, authenticationContext.getLoggedInUser());
-                        } catch (CreateException e) {
-                            log.error("error on creating subissue", e);
-                        }
-                    }
-                };
+                final FromTo fromTo = getFromTo(parentIssue, dir, subTask);
+                final Long issueLinkTypeId = Long.parseLong(issueLinkTypeIdS);
+                final Integer linkDepth = CreateUtilities.getInt(args.get("field.linkDepth"), 1);
+                if (linkDepth > 1) {
+                    Integer addDepth = linkDepth - 1;
+                    createParentsLinks(parentIssue, subTask, issueLinkTypeId, dir, addDepth, new HashSet<Issue>());
+                }
+                Runnable createLink = createLinkRunnable(fromTo.getFrom().getId(), fromTo.getTo().getId(), issueLinkTypeId);
                 if (parentIssue.getId() != null) {
                     createLink.run();
                 } else {
@@ -309,6 +326,104 @@ public class CreateSubIssueFunction extends AbstractJiraFunctionProvider {
             log.error("Unexpected exception", e);
         } finally {
             ImportUtils.setIndexIssues(previousIndexSetting); // return to previous state
+        }
+    }
+
+    private Runnable createLinkRunnable(final Long from, final Long to, final Long linkType) {
+        return new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    issueLinkManager.createIssueLink(from, to, linkType, 0L, authenticationContext.getLoggedInUser());
+                } catch (CreateException e) {
+                    log.error("error on creating subissue", e);
+                }
+            }
+        };
+    }
+
+    private void createParentsLinks(Issue parentIssue, Issue subtask, Long issueLinkTypeId, Direction dir, int addDepth, Set<Issue> linked) {
+        if (addDepth == 0) return;
+        // else if addDepth < 0 recurse until the end
+        List<IssueLink> allLinks = null;
+        switch (dir) {
+            case To: allLinks = issueLinkManager.getInwardLinks(parentIssue.getId()); break;
+            case From: allLinks = issueLinkManager.getOutwardLinks(parentIssue.getId()); break;
+        }
+        // ------------ filter
+        List<IssueLink> links = new LinkedList<IssueLink>(); // links should ALWAYS be in linked list!
+        for (IssueLink il : allLinks) {
+            if (il.getIssueLinkType().getId().equals(issueLinkTypeId)) {
+                links.add(il);
+            }
+        }
+        List<Runnable> createLinks = new LinkedList<Runnable>(); // why not linked list dude
+        List<Issue> nextParents = new LinkedList<Issue>();
+        // ------------ create links on this layer
+        for (IssueLink il : links) {
+            Issue newParent = null;
+            switch(dir) {
+                case To: newParent = il.getSourceObject(); break;
+                case From: newParent = il.getDestinationObject(); break;
+            }
+            if (linked.contains(newParent)) {
+                log.warn("maybe loop here, continuing");
+                continue;
+            }
+            FromTo fromTo = getFromTo(newParent, dir, subtask);
+            Runnable createLink = createLinkRunnable(fromTo.getFrom().getId(), fromTo.getTo().getId(), issueLinkTypeId);
+            createLinks.add(createLink);
+            nextParents.add(newParent);
+        }
+        for (Runnable r : createLinks) {
+            r.run();
+        }
+        // ------------- loop defence
+        linked.add(parentIssue);
+        // -------------- recursion
+        for (Issue nextParent : nextParents) {
+            createParentsLinks(nextParent, subtask, issueLinkTypeId, dir, addDepth - 1, linked);
+        }
+    }
+
+    private enum Direction {
+        To, From
+    }
+
+    private static FromTo getFromTo(Issue parentIssue, Direction direction, Issue subTask) {
+        Issue from;
+        Issue to;
+        switch (direction) {
+            case To: from = parentIssue; to = subTask; break;
+            case From: from = subTask; to = parentIssue; break;
+            default: throw new RuntimeException("some sort of problem with directions");
+        }
+        return new FromTo(from, to);
+    }
+
+    private static class FromTo {
+        Issue from;
+        Issue to;
+
+        private FromTo(Issue from, Issue to) {
+            this.from = from;
+            this.to = to;
+        }
+
+        public Issue getFrom() {
+            return from;
+        }
+
+        public void setFrom(Issue from) {
+            this.from = from;
+        }
+
+        public Issue getTo() {
+            return to;
+        }
+
+        public void setTo(Issue to) {
+            this.to = to;
         }
     }
 

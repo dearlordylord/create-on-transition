@@ -2,14 +2,44 @@
     <plugin-info>
         <description>${project.description}</description>
         <version>${project.version}</version>
-        <application-version min="${atlassian.product.version}" max="${atlassian.product.max-version}"/>
         <vendor name="${project.organization.name}" url="${project.organization.url}"/>
     </plugin-info>
 
+    <component-import key="eventPublisher" interface="com.atlassian.event.api.EventPublisher"/>
     <component-import key="workflow-traveller" interface="ru.megaplan.jira.plugins.workflow.util.traveller.WorkflowTraveller"/>
+    <component-import key="workflow-search" interface="ru.megaplan.jira.plugins.history.search.HistorySearchManager"/>
+
+    <component-import key="entityLinkService">
+        <interface>com.atlassian.applinks.api.EntityLinkService</interface>
+    </component-import>
+
+    <component key="ToTestMegabugWorkflowListener" class="ru.megaplan.jira.plugins.listener.ToTestMegabugWorkflowListener">
+        <description>ToTestMegabugWorkflowListener</description>
+    </component>
+
+    <component key="CopyCommentListener" class="ru.megaplan.jira.plugins.listener.CopyCommentListener">
+        <description>CopyCommentListener</description>
+    </component>
+
+    <issue-tabpanel key="subissueReviews" name="Subissue reviews"
+                    class="ru.megaplan.jira.plugins.tab.LinkedIssuesCodeTab">
+        <label>Subissue reviews</label>
+        <resource type="velocity" name="view" location="/resources/templates/ru/megaplan/jira/plugins/workflow/mps/utils/panel/issuesFromSameReporterView.vm"/>
+        <supports-ajax-load>true</supports-ajax-load>
+        <conditions type="OR">
+        </conditions>
+    </issue-tabpanel>
 
     <customfield-type key="Ignorance" name="Ignorance field"
                       class="ru.megaplan.jira.plugins.customfield.IgnoranceNotificationCFType">
+        <resource type="velocity" name="view" location="templates/plugins/fields/view/view-basictext.vm"/>
+        <resource type="velocity" name="column-view" location="templates/plugins/fields/view/view-limited-text.vm"/>
+        <resource type="velocity" name="edit" location="templates/customfields/edit/readonly-basictext.vm"/>
+        <resource type="velocity" name="xml" location="templates/plugins/fields/xml/xml-basictext.vm"/>
+    </customfield-type>
+
+    <customfield-type key="Alerto" name="Alerto field"
+                      class="ru.megaplan.jira.plugins.customfield.AlertCustomField">
         <resource type="velocity" name="view" location="templates/plugins/fields/view/view-basictext.vm"/>
         <resource type="velocity" name="column-view" location="templates/plugins/fields/view/view-limited-text.vm"/>
         <resource type="velocity" name="edit" location="templates/customfields/edit/readonly-basictext.vm"/>
@@ -23,6 +53,20 @@
         <resource type="velocity" name="input-parameters" location="templates/allowed-links-condition/allowed-links-condition-input-params.vm"/>
         <resource type="velocity" name="edit-parameters" location="templates/allowed-links-condition/allowed-links-condition-edit-params.vm"/>
     </workflow-condition>
+
+    <workflow-validator key="jqlcount-validator" name="Jql Validator"
+                        class="ru.megaplan.jira.plugins.workflow.validator.JqlValidatorFactory">
+        <description>Jql validator.</description>
+
+        <validator-class>ru.megaplan.jira.plugins.workflow.validator.JqlValidator</validator-class>
+
+        <resource type="velocity" name="view"
+                  location="templates/validators/jql/view.vm"/>
+        <resource type="velocity" name="input-parameters"
+                  location="templates/validators/jql/input.vm"/>
+        <resource type="velocity" name="edit-parameters"
+                  location="templates/validators/jql/input.vm"/>
+    </workflow-validator>
 
     <workflow-function key="createsubissue-function" name="Create sub-task on transition"
                class="org.swift.jira.cot.functions.CreateSubIssueFunctionPluginFactory">
@@ -49,5 +93,10 @@
         <resource type="velocity" name="input-parameters" location="templates/functions/actionwithlinked-function-input-params.vm" />
         <resource type="velocity" name="edit-parameters" location="templates/functions/actionwithlinked-function-edit-params.vm" />
     </workflow-function>
+
+    <web-resource key="hide-issuetypes" name="Hide some issuetypes" >
+        <context>atl.general</context>
+        <resource type="download" name="hide-issuetypes.js" location="js/hideIssueTypes.js" />
+    </web-resource>
 
 </atlassian-plugin>

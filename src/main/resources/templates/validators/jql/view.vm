@@ -1,0 +1,5 @@
+<br/>JQL: $!jql
+<br/>MIN: $!min
+<br/>MAX: $!max
+<br/>ERROR MESSAGE: $!error
+<br/>Ignored roles: $!ignoredroles

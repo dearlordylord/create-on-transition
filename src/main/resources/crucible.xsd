@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="actions" type="actions"/>
+
+  <xs:element name="anchor" type="anchorData"/>
+
+  <xs:element name="changesetData" type="changesetData"/>
+
+  <xs:element name="commentStats" type="commentStats"/>
+
+  <xs:element name="comments" type="comments"/>
+
+  <xs:element name="committerData" type="committerData"/>
+
+  <xs:element name="crucibleRevisionData" type="crucibleRevisionData"/>
+
+  <xs:element name="customFieldData" type="customFieldData"/>
+
+  <xs:element name="customFilterData" type="customFilterData"/>
+
+  <xs:element name="cvsRepositoryData" type="cvsRepositoryData"/>
+
+  <xs:element name="detailedReviewData" type="detailedReviewData"/>
+
+  <xs:element name="generalCommentData" type="generalCommentData"/>
+
+  <xs:element name="gitRepositoryData" type="gitRepositoryData"/>
+
+  <xs:element name="hgRepositoryData" type="hgRepositoryData"/>
+
+  <xs:element name="loginResult" type="loginResult"/>
+
+  <xs:element name="p4RepositoryData" type="p4RepositoryData"/>
+
+  <xs:element name="pluginRepositoryData" type="pluginRepositoryData"/>
+
+  <xs:element name="reviewData" type="reviewData"/>
+
+  <xs:element name="reviewItem" type="fisheyeReviewItemData"/>
+
+  <xs:element name="reviewItemRevisionData" type="reviewItemRevisionData"/>
+
+  <xs:element name="reviewItems" type="reviewItems"/>
+
+  <xs:element name="reviewerData" type="reviewerData"/>
+
+  <xs:element name="reviewers" type="reviewers"/>
+
+  <xs:element name="svnRepositoryData" type="svnRepositoryData"/>
+
+  <xs:element name="transitions" type="transitions"/>
+
+  <xs:element name="userData" type="userData"/>
+
+  <xs:element name="versionInfo" type="versionInfo"/>
+
+  <xs:element name="versionedLineCommentData" type="versionedLineCommentData"/>
+
+  <xs:complexType name="permId">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="actionData">
+    <xs:sequence>
+      <xs:element name="displayName" type="xs:string" minOccurs="0"/>
+      <xs:element name="name" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="actions">
+    <xs:sequence>
+      <xs:element name="actionData" type="actionData" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="anchorData">
+    <xs:sequence>
+      <xs:element name="anchorPath" type="xs:string" minOccurs="0"/>
+      <xs:element name="anchorRepository" type="xs:string" minOccurs="0"/>
+      <xs:element name="stripCount" type="xs:int" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="changesetData">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="commentDataBuilder" abstract="true">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="commentDataImpl">
+    <xs:sequence>
+      <xs:element name="createDate" type="xs:string" minOccurs="0"/>
+      <xs:element name="defectApproved" type="xs:boolean"/>
+      <xs:element name="defectRaised" type="xs:boolean"/>
+      <xs:element name="deleted" type="xs:boolean"/>
+      <xs:element name="draft" type="xs:boolean"/>
+      <xs:element name="message" type="xs:string" minOccurs="0"/>
+      <xs:element name="messageAsHtml" type="xs:string" minOccurs="0"/>
+      <xs:element name="metrics">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="entry" minOccurs="0" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="key" minOccurs="0" type="xs:string"/>
+                  <xs:element name="value" minOccurs="0" type="customFieldData"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="parentCommentId" type="permId" minOccurs="0"/>
+      <xs:element name="readStatus" type="status" minOccurs="0"/>
+      <xs:element name="replies" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:any processContents="skip" namespace="##other" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="user" type="userData" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="customFieldData">
+    <xs:sequence>
+      <xs:element name="configVersion" type="xs:int"/>
+      <xs:element name="value" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="userData">
+    <xs:sequence>
+      <xs:element name="avatarUrl" type="xs:string" minOccurs="0"/>
+      <xs:element name="displayName" type="xs:string" minOccurs="0"/>
+      <xs:element name="userName" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="commentStats">
+    <xs:sequence>
+      <xs:element name="user" type="xs:string" minOccurs="0"/>
+      <xs:element name="published" type="xs:int"/>
+      <xs:element name="drafts" type="xs:int"/>
+      <xs:element name="defects" type="xs:int"/>
+      <xs:element name="unread" type="xs:int"/>
+      <xs:element name="leaveUnread" type="xs:int"/>
+      <xs:element name="read" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="comments">
+    <xs:sequence>
+      <xs:any processContents="lax" namespace="##other" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="generalCommentData">
+    <xs:complexContent>
+      <xs:extension base="commentDataImpl">
+        <xs:sequence>
+          <xs:element name="permId" type="permId" minOccurs="0"/>
+          <xs:element name="permaId" type="permId" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="versionedLineCommentData">
+    <xs:complexContent>
+      <xs:extension base="versionedCommentData">
+        <xs:sequence>
+          <xs:element name="fromLineRange" type="xs:string" minOccurs="0"/>
+          <xs:element name="toLineRange" type="xs:string" minOccurs="0"/>
+          <xs:element name="lineRanges" minOccurs="0">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="lineRange" type="lineRangeDetail" minOccurs="0" maxOccurs="unbounded"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="versionedCommentData" abstract="true">
+    <xs:complexContent>
+      <xs:extension base="commentDataImpl">
+        <xs:sequence>
+          <xs:element name="permaId" type="permId" minOccurs="0"/>
+          <xs:element name="reviewItemId" type="permId" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="lineRangeDetail">
+    <xs:sequence/>
+    <xs:attribute name="revision" type="xs:string"/>
+    <xs:attribute name="range" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="committerData">
+    <xs:sequence>
+      <xs:element name="committerName" type="xs:string" minOccurs="0"/>
+      <xs:element name="repositoryName" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="crucibleRevisionData">
+    <xs:sequence>
+      <xs:element name="rev" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="source" type="xs:string" minOccurs="0"/>
+      <xs:element name="path" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="customFieldDefData">
+    <xs:sequence>
+      <xs:element name="configVersion" type="xs:int"/>
+      <xs:element name="defaultValue" type="customFieldValue" minOccurs="0"/>
+      <xs:element name="fieldScope" type="xs:string" minOccurs="0"/>
+      <xs:element name="label" type="xs:string" minOccurs="0"/>
+      <xs:element name="name" type="xs:string" minOccurs="0"/>
+      <xs:element name="type" type="customFieldValueType" minOccurs="0"/>
+      <xs:element name="values" type="customFieldValue" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="customFieldValue">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="0"/>
+      <xs:element name="value" type="xs:anyType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="customFilterData">
+    <xs:sequence>
+      <xs:element name="allReviewersComplete" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="author" type="xs:string" minOccurs="0"/>
+      <xs:element name="complete" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="creator" type="xs:string" minOccurs="0"/>
+      <xs:element name="moderator" type="xs:string" minOccurs="0"/>
+      <xs:element name="orRoles" type="xs:boolean"/>
+      <xs:element name="project" type="xs:string" minOccurs="0"/>
+      <xs:element name="reviewer" type="xs:string" minOccurs="0"/>
+      <xs:element name="state" type="xs:string" minOccurs="0"/>
+      <xs:element name="title" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="cvsRepositoryData">
+    <xs:complexContent>
+      <xs:extension base="repositoryData">
+        <xs:sequence>
+          <xs:element name="dir" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="repositoryData">
+    <xs:sequence>
+      <xs:element name="enabled" type="xs:boolean"/>
+      <xs:element name="name" type="xs:string" minOccurs="0"/>
+      <xs:element name="type" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="detailedReviewData">
+    <xs:complexContent>
+      <xs:extension base="reviewData">
+        <xs:sequence>
+          <xs:element name="stats" minOccurs="0">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="comments" type="commentStats" minOccurs="0" maxOccurs="unbounded"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element ref="actions" minOccurs="0"/>
+          <xs:element name="generalComments" type="comments" minOccurs="0"/>
+          <xs:element ref="reviewItems" minOccurs="0"/>
+          <xs:element ref="reviewers" minOccurs="0"/>
+          <xs:element ref="transitions" minOccurs="0"/>
+          <xs:element name="versionedComments" type="comments" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="reviewData">
+    <xs:sequence>
+      <xs:element name="allowReviewersToJoin" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="author" type="userData" minOccurs="0"/>
+      <xs:element name="closeDate" type="xs:string" minOccurs="0"/>
+      <xs:element name="createDate" type="xs:string" minOccurs="0"/>
+      <xs:element name="creator" type="userData" minOccurs="0"/>
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+      <xs:element name="dueDate" type="xs:string" minOccurs="0"/>
+      <xs:element name="jiraIssueKey" type="xs:string" minOccurs="0"/>
+      <xs:element name="metricsVersion" type="xs:int"/>
+      <xs:element name="moderator" type="userData" minOccurs="0"/>
+      <xs:element name="name" type="xs:string" minOccurs="0"/>
+      <xs:element name="parentReview" type="permId" minOccurs="0"/>
+      <xs:element name="permaId" type="permId" minOccurs="0"/>
+      <xs:element name="projectKey" type="xs:string" minOccurs="0"/>
+      <xs:element name="reminderDate" type="xs:string" minOccurs="0"/>
+      <xs:element name="state" type="state" minOccurs="0"/>
+      <xs:element name="summary" type="xs:string" minOccurs="0"/>
+      <xs:element name="type" type="reviewType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="reviewItems">
+    <xs:sequence>
+      <xs:element name="reviewItem" type="fisheyeReviewItemData" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="fisheyeReviewItemData">
+    <xs:complexContent>
+      <xs:extension base="reviewItemData">
+        <xs:sequence>
+          <xs:element name="anchorData" type="anchorData" minOccurs="0"/>
+          <xs:element name="authorName" type="xs:string" minOccurs="0"/>
+          <xs:element name="commitDate" type="xs:dateTime" minOccurs="0"/>
+          <xs:element name="commitType" type="commitType" minOccurs="0"/>
+          <xs:element name="expandedRevisions" type="reviewItemRevisionData" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:element name="fileType" type="fileType" minOccurs="0"/>
+          <xs:element name="fromContentUrl" type="xs:string" minOccurs="0"/>
+          <xs:element name="fromPath" type="xs:string" minOccurs="0"/>
+          <xs:element name="fromRevision" type="xs:string" minOccurs="0"/>
+          <xs:element name="patchUrl" type="xs:string" minOccurs="0"/>
+          <xs:element name="repositoryName" type="xs:string" minOccurs="0"/>
+          <xs:element name="showAsDiff" type="xs:boolean" minOccurs="0"/>
+          <xs:element name="toContentUrl" type="xs:string" minOccurs="0"/>
+          <xs:element name="toPath" type="xs:string" minOccurs="0"/>
+          <xs:element name="toRevision" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="reviewItemData">
+    <xs:sequence>
+      <xs:element name="participants" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="participant" type="participantStatus" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="permId" type="permId" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="reviewItemRevisionData">
+    <xs:sequence>
+      <xs:element name="addDate" type="xs:dateTime" minOccurs="0"/>
+      <xs:element name="revision" type="xs:string" minOccurs="0"/>
+      <xs:element name="path" type="xs:string" minOccurs="0"/>
+      <xs:element name="contentUrl" type="xs:string" minOccurs="0"/>
+      <xs:element name="source" type="xs:string" minOccurs="0"/>
+      <xs:element name="changedLines" type="xs:int"/>
+      <xs:element name="fileType" type="fileType" minOccurs="0"/>
+      <xs:element name="commitType" type="commitType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="participantStatus">
+    <xs:sequence>
+      <xs:element name="user" type="userData" minOccurs="0"/>
+      <xs:element name="completed" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="reviewers">
+    <xs:sequence>
+      <xs:element name="reviewer" type="reviewerData" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="reviewerData">
+    <xs:complexContent>
+      <xs:extension base="userData">
+        <xs:sequence>
+          <xs:element name="completed" type="xs:boolean"/>
+          <xs:element name="completionStatusChangeDate" type="xs:long" minOccurs="0"/>
+          <xs:element name="timeSpent" type="xs:long" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="transitions">
+    <xs:sequence>
+      <xs:element name="transitionData" type="actionData" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="fisheyeReviewItemAttibutes">
+    <xs:sequence>
+      <xs:element name="added" type="xs:boolean"/>
+      <xs:element name="copied" type="xs:boolean"/>
+      <xs:element name="deleted" type="xs:boolean"/>
+      <xs:element name="modified" type="xs:boolean"/>
+      <xs:element name="moved" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="gitRepositoryData">
+    <xs:complexContent>
+      <xs:extension base="repositoryData">
+        <xs:sequence>
+          <xs:element name="location" type="xs:string" minOccurs="0"/>
+          <xs:element name="path" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="hgRepositoryData">
+    <xs:complexContent>
+      <xs:extension base="repositoryData">
+        <xs:sequence>
+          <xs:element name="location" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="iso8601DateAdapter">
+    <xs:complexContent>
+      <xs:extension base="xmlAdapter">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="xmlAdapter" abstract="true">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="p4RepositoryData">
+    <xs:complexContent>
+      <xs:extension base="repositoryData">
+        <xs:sequence>
+          <xs:element name="path" type="xs:string" minOccurs="0"/>
+          <xs:element name="port" type="xs:int" minOccurs="0"/>
+          <xs:element name="server" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="pluginRepositoryData">
+    <xs:complexContent>
+      <xs:extension base="repositoryData">
+        <xs:sequence>
+          <xs:element name="available" type="xs:boolean"/>
+          <xs:element name="description" type="xs:string" minOccurs="0"/>
+          <xs:element name="hasChangelogBrowser" type="xs:boolean"/>
+          <xs:element name="hasDirectoryBrowser" type="xs:boolean"/>
+          <xs:element name="pluginKey" type="xs:string" minOccurs="0"/>
+          <xs:element name="stateDescription" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="projectDataBuilder">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="projectData">
+    <xs:sequence>
+      <xs:element name="allowReviewersToJoin" type="xs:boolean"/>
+      <xs:element name="allowedReviewers" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="defaultDuration" type="xs:int" minOccurs="0"/>
+      <xs:element name="defaultModerator" type="xs:string" minOccurs="0"/>
+      <xs:element name="defaultObjectives" type="xs:string" minOccurs="0"/>
+      <xs:element name="defaultRepositoryName" type="xs:string" minOccurs="0"/>
+      <xs:element name="defaultReviewerUsers" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="id" type="xs:int"/>
+      <xs:element name="key" type="xs:string" minOccurs="0"/>
+      <xs:element name="moderatorEnabled" type="xs:boolean"/>
+      <xs:element name="name" type="xs:string" minOccurs="0"/>
+      <xs:element name="permissionSchemeId" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="svnRepositoryData">
+    <xs:complexContent>
+      <xs:extension base="repositoryData">
+        <xs:sequence>
+          <xs:element name="path" type="xs:string" minOccurs="0"/>
+          <xs:element name="url" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="userProfileData">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="versionInfo">
+    <xs:sequence>
+      <xs:element name="releaseNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="buildDate" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="versionedLineCommentBuilder">
+    <xs:complexContent>
+      <xs:extension base="commentDataBuilder">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="loginResult">
+    <xs:sequence>
+      <xs:element name="token" type="xs:string" minOccurs="0"/>
+      <xs:element name="error" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="status">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="READ"/>
+      <xs:enumeration value="UNREAD"/>
+      <xs:enumeration value="LEAVE_UNREAD"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="customFieldValueType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NOT_SET"/>
+      <xs:enumeration value="STRING"/>
+      <xs:enumeration value="INTEGER"/>
+      <xs:enumeration value="BOOLEAN"/>
+      <xs:enumeration value="DATE"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="commitType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Added"/>
+      <xs:enumeration value="Deleted"/>
+      <xs:enumeration value="Modified"/>
+      <xs:enumeration value="Moved"/>
+      <xs:enumeration value="Copied"/>
+      <xs:enumeration value="Unknown"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="fileType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="File"/>
+      <xs:enumeration value="Directory"/>
+      <xs:enumeration value="Unknown"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="state">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Draft"/>
+      <xs:enumeration value="Approval"/>
+      <xs:enumeration value="Review"/>
+      <xs:enumeration value="Summarize"/>
+      <xs:enumeration value="Closed"/>
+      <xs:enumeration value="Dead"/>
+      <xs:enumeration value="Rejected"/>
+      <xs:enumeration value="Unknown"/>
+      <xs:enumeration value="OpenSnippet"/>
+      <xs:enumeration value="ClosedSnippet"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="reviewType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="REVIEW"/>
+      <xs:enumeration value="SNIPPET"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
+

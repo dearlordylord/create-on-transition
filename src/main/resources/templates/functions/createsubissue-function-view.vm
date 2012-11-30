@@ -16,6 +16,8 @@
 A <b>#if (${isSubTask}) Sub-task #else Issue #end</b> of type <b>${subIssueTypeName}</b> will be created with priority: <b>#if (${subIssuePriorityId} != "0") ${subIssuePriorityId}#else Parent's priority#end</b>.
 #if (${createSibbling} == "1") <br>A <b>sibbling</b> will be created if the parent is a sub task. #end
 #if (${issueLinkTypeName}) <br>Create link: <b>${issueLinkTypeName}</b> : <b>#if(${issueLinkDirection} == "0") Parent->Child #else Child->Parent #end </b> #end
+<br>Link depth: <b>#if (${linkDepth}) ${linkDepth} #else 1 #end</b>
+#if (${notPerformIfJql} && (${notPerformIfJql} != ""))<br>Not perform if jql: <b>${notPerformIfJql}</b>.#end
 <br>Reporter will be: <b>${subIssueReporterName} #if (${subIssueReporterName} == "specific user") (${specificReporter})#end</b>.
 <br>Assignee will be: <b>${subIssueAssigneeName} #if (${subIssueAssigneeName} == "specific user") (${specificAssignee})#end</b>.
 <br>Affected versions will be: <b>${subIssueAffectedVersionsName} #if (${subIssueAffectedVersionsName} == "specific versions") (${specificAffectedVersions})#end</b>.

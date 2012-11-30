@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="changeset" type="changesetDataFE"/>
+
+  <xs:element name="changesetIdList" type="changesetsData"/>
+
+  <xs:element name="fileRevision" type="fileRevisionData"/>
+
+  <xs:element name="repository" nillable="true" type="xs:anyType"/>
+
+  <xs:element name="sliceData" type="revisionGraphSliceData"/>
+
+  <xs:complexType name="changesetDataFEBuilder">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="changesetDataFE">
+    <xs:sequence>
+      <xs:element name="branches" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="branch" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="children" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="child" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="comment" type="xs:string" minOccurs="0"/>
+      <xs:element name="fileRevisionKey" type="fileRevisionKeyData" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="p4JobIds" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="p4JobId" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="parents" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parent" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="tags" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="tag" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="author" type="xs:string"/>
+    <xs:attribute name="branch" type="xs:string"/>
+    <xs:attribute name="csid" type="xs:string"/>
+    <xs:attribute name="date" type="xs:dateTime"/>
+    <xs:attribute name="displayId" type="xs:string"/>
+    <xs:attribute name="position" type="xs:string"/>
+    <xs:attribute name="repositoryName" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="fileRevisionKeyData">
+    <xs:sequence/>
+    <xs:attribute name="path" type="xs:string"/>
+    <xs:attribute name="rev" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="changesetsData">
+    <xs:sequence>
+      <xs:element name="csid" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="resultsTruncated" type="xs:boolean" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="cvsRepositoryData">
+    <xs:complexContent>
+      <xs:extension base="repositoryDataFE">
+        <xs:sequence>
+          <xs:element name="dir" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="repositoryDataFE">
+    <xs:sequence/>
+    <xs:attribute name="enabled" type="xs:boolean" use="required"/>
+    <xs:attribute name="finishedFullSlurp" type="xs:boolean" use="required"/>
+    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="repositoryState" type="repositoryState"/>
+  </xs:complexType>
+
+  <xs:complexType name="fileRevisionData">
+    <xs:sequence>
+      <xs:element name="ancestor" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="comment" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="ancestor" type="xs:string"/>
+    <xs:attribute name="author" type="xs:string"/>
+    <xs:attribute name="contentLink" type="xs:string"/>
+    <xs:attribute name="csid" type="xs:string"/>
+    <xs:attribute name="date" type="xs:dateTime"/>
+    <xs:attribute name="linesAdded" type="xs:int" use="required"/>
+    <xs:attribute name="linesRemoved" type="xs:int" use="required"/>
+    <xs:attribute name="path" type="xs:string"/>
+    <xs:attribute name="rev" type="xs:string"/>
+    <xs:attribute name="fileRevisionState" type="fileRevisionState"/>
+    <xs:attribute name="totalLines" type="xs:int" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="gitRepositoryData">
+    <xs:complexContent>
+      <xs:extension base="repositoryDataFE">
+        <xs:sequence>
+          <xs:element name="location" type="xs:string" minOccurs="0"/>
+          <xs:element name="path" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="hgRepositoryData">
+    <xs:complexContent>
+      <xs:extension base="repositoryDataFE">
+        <xs:sequence>
+          <xs:element name="location" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="mailMessageData">
+    <xs:sequence>
+      <xs:element name="from" type="xs:string" minOccurs="0"/>
+      <xs:element name="fromDisplayName" type="xs:string" minOccurs="0"/>
+      <xs:element name="subject" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="notificationData">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="p4RepositoryData">
+    <xs:complexContent>
+      <xs:extension base="repositoryDataFE">
+        <xs:sequence>
+          <xs:element name="path" type="xs:string" minOccurs="0"/>
+          <xs:element name="port" type="xs:int" minOccurs="0"/>
+          <xs:element name="server" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="pathInfoData">
+    <xs:sequence/>
+    <xs:attribute name="dir" type="xs:boolean" use="required"/>
+    <xs:attribute name="headDeleted" type="xs:boolean" use="required"/>
+    <xs:attribute name="name" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="revisionGraphSliceData">
+    <xs:sequence>
+      <xs:element name="revisions" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="revision" type="changesetDataFE" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="sparseRevisions" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="sparseRevision" type="changesetDataFE" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="svnRepositoryData">
+    <xs:complexContent>
+      <xs:extension base="repositoryDataFE">
+        <xs:sequence>
+          <xs:element name="path" type="xs:string" minOccurs="0"/>
+          <xs:element name="url" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="watchData">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:simpleType name="repositoryState">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="RUNNING"/>
+      <xs:enumeration value="STOPPING"/>
+      <xs:enumeration value="STOPPED"/>
+      <xs:enumeration value="STARTING"/>
+      <xs:enumeration value="UNKNOWN"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="fileRevisionState">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ADDED"/>
+      <xs:enumeration value="REMOVED"/>
+      <xs:enumeration value="CHANGED"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
+

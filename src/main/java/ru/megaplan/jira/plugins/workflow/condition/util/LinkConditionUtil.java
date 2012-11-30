@@ -204,11 +204,11 @@ public class LinkConditionUtil {
 
         log.warn("checking issue : " + issueObject.getKey());
 
-        if ((!contains(issueTypes, issueType)) && ((!restOfIssueTypesAreAllowed.equals("true")) || (!issueTypes.equals(""))))
+        if (!contains(issueTypes, issueType) && ((!restOfIssueTypesAreAllowed.equals("true")) || (!issueTypes.equals(""))))
         {
             if (restOfIssueTypesAreAllowed.equals("false"))
             {
-                return -1;
+                return 0;
             }
         }
         else
@@ -218,7 +218,7 @@ public class LinkConditionUtil {
             {
                 if (restOfStatusesAreAllowed.equals("false"))
                 {
-                    return -1;
+                    return 0;
                 }
             }
             else

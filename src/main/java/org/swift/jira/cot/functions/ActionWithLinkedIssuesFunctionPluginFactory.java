@@ -63,6 +63,7 @@ public class ActionWithLinkedIssuesFunctionPluginFactory extends AbstractWorkflo
         params.put("field.moveUser", extractSingleParam(conditionParams, "moveUser"));
         params.put("field.specificCommentUser", extractSingleParam(conditionParams, "specificCommentUser"));
         params.put("field.specificMoveUser", extractSingleParam(conditionParams, "specificMoveUser"));
+        params.put("field.jqlFilter", extractSingleParam(conditionParams, "jqlFilter"));
         return params;
     }
 
@@ -81,7 +82,8 @@ public class ActionWithLinkedIssuesFunctionPluginFactory extends AbstractWorkflo
         String specificMoveUser = (String) functionDescriptor.getArgs().get("field.specificMoveUser");
         velocityParams.put("specificCommentUser", specificCommentUser == null ? "" : specificCommentUser);
         velocityParams.put("specificMoveUser", specificMoveUser == null ? "" : specificMoveUser);
-
+        String jqlFilter = (String) functionDescriptor.getArgs().get("field.jqlFilter");
+        velocityParams.put("jqlFilter", jqlFilter == null? "" : jqlFilter);
     }
 
     @Override
@@ -106,5 +108,7 @@ public class ActionWithLinkedIssuesFunctionPluginFactory extends AbstractWorkflo
         velocityParams.put("currentMoveUser", functionDescriptor.getArgs().get("field.moveUser"));
         String specificMoveUser = (String) functionDescriptor.getArgs().get("field.specificMoveUser");
         velocityParams.put("currentSpecificMoveUser", specificMoveUser == null ? "" : specificMoveUser);
+        String jqlFilter = (String) functionDescriptor.getArgs().get("field.jqlFilter");
+        velocityParams.put("currentJqlFilter", jqlFilter == null? "" : jqlFilter);
     }
 }

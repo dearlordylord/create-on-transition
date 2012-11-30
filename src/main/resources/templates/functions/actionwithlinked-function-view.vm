@@ -4,3 +4,4 @@
 <br>Comment user: <b>${commentUser}</b>.
 <br>Move linked issue to status: <b>${linkedIssueMoveStatus}</b>
 <br>Move user: <b>${moveUser}</b>
+<br>Jql filter: <b>${jqlFilter}</b>

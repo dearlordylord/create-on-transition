@@ -93,6 +93,9 @@ public class CreateSubIssueFunctionPluginFactory extends AbstractWorkflowPluginF
         params.put("field.issueLinkTypeId", extractSingleParam(conditionParams, "issueLinkTypeId"));
         params.put("field.issueLinkDirection", extractSingleParam(conditionParams, "issueLinkDirection"));
 
+        params.put("field.linkDepth", extractSingleParam(conditionParams, "linkDepth"));
+        params.put("field.notPerformIfJql", extractSingleParam(conditionParams, "notPerformIfJql"));
+
         // Reporter
         params.put("field.subIssueReporter", extractSingleParam(conditionParams, "subIssueReporter"));
         params.put("field.specificReporter", extractSingleParam(conditionParams, "specificReporter"));
@@ -163,6 +166,8 @@ public class CreateSubIssueFunctionPluginFactory extends AbstractWorkflowPluginF
             String issueLinkTypeId = (String) functionDescriptor.getArgs().get("field.issueLinkTypeId");
             if (issueLinkTypeId != null && !"0".equals(issueLinkTypeId))
                 velocityParams.put("issueLinkTypeName", issueLinkTypeManager.getIssueLinkType(Long.parseLong(issueLinkTypeId)).getName());
+            velocityParams.put("linkDepth", functionDescriptor.getArgs().get("field.linkDepth"));
+            velocityParams.put("notPerformIfJql", functionDescriptor.getArgs().get("field.notPerformIfJql"));
             velocityParams.put("createSibbling", functionDescriptor.getArgs().get("field.createSibbling"));
             velocityParams.put("issueLinkTypeId", functionDescriptor.getArgs().get("field.issueLinkTypeId"));
             velocityParams.put("issueLinkDirection", functionDescriptor.getArgs().get("field.issueLinkDirection"));
@@ -342,6 +347,9 @@ public class CreateSubIssueFunctionPluginFactory extends AbstractWorkflowPluginF
             velocityParams.put("subIssuePriorities", constantsManager.getPriorityObjects());
 
             velocityParams.put("issueLinkTypes", issueLinkTypeManager.getIssueLinkTypes());
+
+            velocityParams.put("currentLinkDepth", functionDescriptor.getArgs().get("field.linkDepth"));
+            velocityParams.put("currentNotPerformIfJql", functionDescriptor.getArgs().get("field.notPerformIfJql"));
 
             // Reporter
             int reporter = CreateUtilities.getInt((String) functionDescriptor.getArgs().get("field.subIssueReporter"), CreateUtilities.USER_CURRENT);

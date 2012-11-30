@@ -96,6 +96,42 @@
 
 <tr bgcolor=ffffff>
     <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Link depth:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            <tr>
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <input type="text" name="linkDepth" value="1"/>
+                    <br><font size="1">Link Depth. 1 is link only with parent. 2 - link with parent's parents etc. 0 - link recursive. If empty then == 1
+                    </font>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Not perform if jql:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            <tr>
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <input type="text" name="notPerformIfJql" value=""/>
+                    <br><font size="1">Not perform if jql... u can use regular substitutions as descripted below.
+                    </font>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
         <span class="label">Sub-task priority:</span>
     </td>
 

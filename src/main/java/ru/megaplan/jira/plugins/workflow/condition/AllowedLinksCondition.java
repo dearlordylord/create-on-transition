@@ -72,12 +72,12 @@ public class AllowedLinksCondition
         for (IssueLink link : inwardIssueLinks)
         {
             Long issueLinkType = link.getIssueLinkType().getId();
-            if ((!LinkConditionUtil.contains(inwardIssueLinkTypes, issueLinkType)) && ((!restOfLinkTypesAreAllowed.equals("true")) || (!inwardIssueLinkTypes.equals("")) || (!outwardIssueLinkTypes.equals(""))))
+            if (!LinkConditionUtil.contains(inwardIssueLinkTypes, issueLinkType) && ((!restOfLinkTypesAreAllowed.equals("true")) || (!inwardIssueLinkTypes.equals("")) || (!outwardIssueLinkTypes.equals(""))))
             {
-                if (restOfLinkTypesAreAllowed.equals("false"))
-                {
-                    return false;
-                }
+                //if (restOfLinkTypesAreAllowed.equals("false"))
+                //{
+                //    return false;
+                //}
             }
             else
             {
@@ -101,10 +101,10 @@ public class AllowedLinksCondition
             Long issueLinkType = link.getIssueLinkType().getId();
             if ((!LinkConditionUtil.contains(outwardIssueLinkTypes, issueLinkType)) && ((!restOfLinkTypesAreAllowed.equals("true")) || (!inwardIssueLinkTypes.equals("")) || (!outwardIssueLinkTypes.equals(""))))
             {
-                if (restOfLinkTypesAreAllowed.equals("false"))
-                {
-                    return false;
-                }
+                //if (restOfLinkTypesAreAllowed.equals("false"))
+                //{
+                //    return false;
+                //}
             }
             else
             {

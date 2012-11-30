@@ -27,6 +27,15 @@ public class ReviewData {
     private PermaId permaId;
     private String projectKey;
     private String type;
+    private String state;
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
 
     public String getAllowReviewersToJoin() {
         return allowReviewersToJoin;
@@ -130,5 +139,25 @@ public class ReviewData {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "ReviewData{" +
+                "allowReviewersToJoin='" + allowReviewersToJoin + '\'' +
+                ", author=" + author +
+                ", createDate=" + createDate +
+                ", creator=" + creator +
+                ", description='" + description + '\'' +
+                ", dueDate=" + dueDate +
+                ", jiraIssueKey='" + jiraIssueKey + '\'' +
+                ", metricsVersion=" + metricsVersion +
+                ", moderator=" + moderator +
+                ", name='" + name + '\'' +
+                ", permaId=" + permaId +
+                ", projectKey='" + projectKey + '\'' +
+                ", type='" + type + '\'' +
+                ", state='" + state + '\'' +
+                '}';
     }
 }
