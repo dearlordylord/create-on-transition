@@ -22,6 +22,10 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import com.atlassian.jira.bc.issue.search.SearchService;
 import com.atlassian.jira.component.ComponentAccessor;
@@ -112,6 +116,8 @@ public class CreateSubIssueFunction extends AbstractJiraFunctionProvider {
     protected final IssueLinkManager issueLinkManager;
     private final FieldConfigSchemeManager schemeManager;
     private final SearchService searchService;
+
+    private final ScheduledThreadPoolExecutor poolExecutor = new ScheduledThreadPoolExecutor(3);
 
     public CreateSubIssueFunction(final CustomFieldManager customFieldManager, final SubTaskManager subTaskManager, final IssueManager issueManager,
                                   final IssueFactory issueFactory, final ConstantsManager constantsManager, final ApplicationProperties applicationProperties,
@@ -205,7 +211,7 @@ public class CreateSubIssueFunction extends AbstractJiraFunctionProvider {
         }
         log.debug("Create a sub task for parent issue: " + parentIssue.getKey() + ", initiating issue was: " + originalIssue.getKey());
 
-        MutableIssue issueObject = issueFactory.getIssue();
+        final MutableIssue issueObject = issueFactory.getIssue();
         issueObject.setProjectId(parentIssue.getProjectObject().getId());
         issueObject.setIssueTypeObject(subIssueType);
         issueObject.setSecurityLevelId(parentIssue.getSecurityLevelId());
@@ -268,65 +274,74 @@ public class CreateSubIssueFunction extends AbstractJiraFunctionProvider {
         setCustomFieldValue(issueObject, args.get("field.customField3Name"), args.get("field.customField3Value1"), args.get("field.customField3Value2"),
                 parentIssue, originalIssue, transientVariables);
 
+        final Issue finalParent = parentIssue;
+        final User creator = authenticationContext.getLoggedInUser();
+
         // Now create the subtask
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("issue", issueObject);
+        poolExecutor.schedule(new Runnable() {
 
-        boolean previousIndexSetting = ImportUtils.isIndexIssues();
-        try {
-            User creator = issueObject.getReporter();
-            if (creator == null) creator = authenticationContext.getLoggedInUser();
-            Issue subTask = issueManager.createIssueObject(authenticationContext.getLoggedInUser(), params);
-            if (issueObject.getIssueTypeObject().isSubTask())
-                subTaskManager.createSubTaskIssueLink(parentIssue, subTask, authenticationContext.getLoggedInUser());
-            final String issueLinkTypeIdS = args.get("field.issueLinkTypeId");
-            if (issueLinkTypeIdS != null && !"0".equals(issueLinkTypeIdS)) {
+            @Override
+            public void run() {
+                Map<String, Object> params = new HashMap<String, Object>();
+                params.put("issue", issueObject);
 
-                int direction = CreateUtilities.getInt(args.get("field.issueLinkDirection"), 0);
-                Direction dir;
-                if (direction == 0) {
-                    dir = Direction.To;
-                } else {
-                    dir = Direction.From;
-                }
-                final FromTo fromTo = getFromTo(parentIssue, dir, subTask);
-                final Long issueLinkTypeId = Long.parseLong(issueLinkTypeIdS);
-                final Integer linkDepth = CreateUtilities.getInt(args.get("field.linkDepth"), 1);
-                if (linkDepth > 1) {
-                    Integer addDepth = linkDepth - 1;
-                    createParentsLinks(parentIssue, subTask, issueLinkTypeId, dir, addDepth, new HashSet<Issue>());
-                }
-                Runnable createLink = createLinkRunnable(fromTo.getFrom().getId(), fromTo.getTo().getId(), issueLinkTypeId);
-                if (parentIssue.getId() != null) {
-                    createLink.run();
-                } else {
-                    //maybe add run service later
-                    log.error("can't create issue link because parent issue isn't created yet; " +
-                            "please move postfunction below 'create issue' function in transition settings");
-                }
+                boolean previousIndexSetting = ImportUtils.isIndexIssues();
+                try {
+                    Issue subTask = issueManager.createIssueObject(creator, params);
+                    if (issueObject.getIssueTypeObject().isSubTask())
+                        subTaskManager.createSubTaskIssueLink(finalParent, subTask, creator);
+                    final String issueLinkTypeIdS = args.get("field.issueLinkTypeId");
+                    if (issueLinkTypeIdS != null && !"0".equals(issueLinkTypeIdS)) {
 
+                        int direction = CreateUtilities.getInt(args.get("field.issueLinkDirection"), 0);
+                        Direction dir;
+                        if (direction == 0) {
+                            dir = Direction.To;
+                        } else {
+                            dir = Direction.From;
+                        }
+                        final FromTo fromTo = getFromTo(finalParent, dir, subTask);
+                        final Long issueLinkTypeId = Long.parseLong(issueLinkTypeIdS);
+                        final Integer linkDepth = CreateUtilities.getInt(args.get("field.linkDepth"), 1);
+                        if (linkDepth > 1) {
+                            Integer addDepth = linkDepth - 1;
+                            createParentsLinks(finalParent, subTask, issueLinkTypeId, dir, addDepth, new HashSet<Issue>());
+                        }
+                        Runnable createLink = createLinkRunnable(fromTo.getFrom().getId(), fromTo.getTo().getId(), issueLinkTypeId);
+                        if (finalParent.getId() != null) {
+                            createLink.run();
+                        } else {
+                            //maybe add run service later
+                            log.error("can't create issue link because parent issue isn't created yet; " +
+                                    "please move postfunction below 'create issue' function in transition settings");
+                        }
+
+                    }
+
+
+                    // Not sure about this part - here are some references
+                    // - http://forums.atlassian.com/thread.jspa?messageID=257362255
+                    // - http://wiki.customware.net/repository/pages/viewpage.action?pageId=8093744
+                    // - http://forums.atlassian.com/thread.jspa?messageID=257362762
+
+                    ImportUtils.setIndexIssues(true);  // temporarily set
+
+                    // This is gone in 4.3, doesn't seem to have a replacement
+                    // ManagerFactory.getCacheManager().flush(CacheManager.ISSUE_CACHE, subTask);
+                    ComponentManager.getInstance().getIndexManager().reIndex(subTask);
+                    ImportUtils.setIndexIssues(previousIndexSetting);
+                } catch (CreateException e) {
+                    log.error("Could not create sub-task", e);
+                } catch (IndexException e) {
+                    log.error("Index exception", e);
+                } catch (Exception e) {
+                    log.error("Unexpected exception", e);
+                } finally {
+                    ImportUtils.setIndexIssues(previousIndexSetting); // return to previous state
+                }
             }
+        }, 3, TimeUnit.SECONDS);
 
-
-            // Not sure about this part - here are some references
-            // - http://forums.atlassian.com/thread.jspa?messageID=257362255
-            // - http://wiki.customware.net/repository/pages/viewpage.action?pageId=8093744
-            // - http://forums.atlassian.com/thread.jspa?messageID=257362762
-
-            ImportUtils.setIndexIssues(true);  // temporarily set
-
-            // This is gone in 4.3, doesn't seem to have a replacement
-            // ManagerFactory.getCacheManager().flush(CacheManager.ISSUE_CACHE, subTask);
-            ComponentManager.getInstance().getIndexManager().reIndex(subTask);
-        } catch (CreateException e) {
-            log.error("Could not create sub-task", e);
-        } catch (IndexException e) {
-            log.error("Index exception", e);
-        } catch (Exception e) {
-            log.error("Unexpected exception", e);
-        } finally {
-            ImportUtils.setIndexIssues(previousIndexSetting); // return to previous state
-        }
     }
 
     private Runnable createLinkRunnable(final Long from, final Long to, final Long linkType) {

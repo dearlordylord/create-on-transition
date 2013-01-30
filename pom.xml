@@ -13,7 +13,7 @@
     <properties>
         <atlassian.plugin.key>org.swift.jira.cot</atlassian.plugin.key>
         <atlassian.product.version>5.1</atlassian.product.version> <!-- only use major versions -->
-        <atlassian.product.max-version>5.1</atlassian.product.max-version>
+        <atlassian.product.max-version>5.9</atlassian.product.max-version>
         <product.version>5.1</product.version>
         <product.data.version>5.1</product.data.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -65,8 +65,8 @@
         <developerConnection>scm:hg:https://bitbucket.org/bob_swift/jira-create-on-transition-plugin</developerConnection>
     </scm>
 
-   <licenses>
-        <license>
+    <licenses>
+         <license>
             <name>Apache License 2.0</name>
             <distribution>http://www.opensource.org/licenses/apache2.0.php</distribution>
             <comments>
@@ -78,13 +78,47 @@
 
     <dependencies>
 
+    <!--    <dependency>
+            <groupId>cruciblebeans</groupId>
+            <artifactId>cruciblebeans</artifactId>
+            <version>0.1</version>
+        </dependency>    -->
+
+        <dependency>
+            <groupId>com.atlassian.jira</groupId>
+            <artifactId>jira-api</artifactId>
+            <version>${atlassian.product.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.4.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+       <!-- <dependency>
+            <groupId>org.netbeans.external</groupId>
+            <artifactId>jsr173_1.0_api</artifactId>
+            <version>RELEASE721</version>
+            <scope>compile</scope>
+        </dependency> -->
+
+      <!--  <dependency>
+            <groupId>xmlbeans</groupId>
+            <artifactId>xbean</artifactId>
+            <version>2.2.0</version>
+            <scope>compile</scope>
+        </dependency> -->
+
+
         <dependency>
             <groupId>com.atlassian.jira</groupId>
             <artifactId>atlassian-jira</artifactId>
             <version>${atlassian.product.version}</version>
             <!-- <scope>compile</scope>  -->
             <scope>provided</scope>
-
         </dependency>
 
         <dependency>
@@ -93,6 +127,23 @@
             <version>1.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>ru.megaplan.jira.plugins</groupId>
+            <artifactId>history-search-plugin</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.atlassian.applinks</groupId>
+            <artifactId>applinks-api</artifactId>
+            <version>3.9.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+
+
 
     </dependencies>
 
@@ -122,6 +173,11 @@
                             <artifactId>jira-workflow-traveller</artifactId>
                             <version>1.0-SNAPSHOT</version>
                         </pluginArtifact>
+                        <pluginArtifact>
+                            <groupId>ru.megaplan.jira.plugins</groupId>
+                            <artifactId>history-search-plugin</artifactId>
+                            <version>1.0-SNAPSHOT</version>
+                        </pluginArtifact>
                     </pluginArtifacts>
                 </configuration>
             </plugin>
@@ -141,6 +197,22 @@
             <name>Jira maven2 repository</name>
             <url>https://maven.atlassian.com/maven1</url>
         </repository>
+        <!-- In Project repository -->
+     <!--   <repository>
+            <id>in-project</id>
+            <name>In Project Repo</name>
+            <url>file://${project.basedir}/libs</url>
+        </repository>
+        <repository>
+            <id>shiteaters</id>
+            <name>Shit eaters group</name>
+            <url>http://bits.netbeans.org/maven2</url>
+        </repository>
+        <repository>
+            <id>faggots</id>
+            <name>Faggots main repo</name>
+            <url>http://mirrors.ibiblio.org/maven2/</url>
+        </repository> -->
     </repositories>
 
 </project>
