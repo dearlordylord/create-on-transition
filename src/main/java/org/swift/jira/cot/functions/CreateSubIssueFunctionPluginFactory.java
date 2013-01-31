@@ -124,6 +124,9 @@ public class CreateSubIssueFunctionPluginFactory extends AbstractWorkflowPluginF
         // Original estimate
         params.put("field.subIssueOriginalEstimate", extractSingleParam(conditionParams, "subIssueOriginalEstimate"));
 
+        // field.notPerformIfCustomFieldsIsNull
+        params.put("field.notPerformIfCustomFieldsIsNull", extractSingleParam(conditionParams, "notPerformIfCustomFieldsIsNull"));
+
         // Copy parent fields
         params.put("field.copyParentFields", extractSingleParam(conditionParams, "copyParentFields"));
 
@@ -240,6 +243,10 @@ public class CreateSubIssueFunctionPluginFactory extends AbstractWorkflowPluginF
             String subIssueOriginalEstimate = (String) functionDescriptor.getArgs().get("field.subIssueOriginalEstimate");
             velocityParams.put("subIssueOriginalEstimate", subIssueOriginalEstimate == null ? "" : subIssueOriginalEstimate);
 
+            // notPerformIfCustomFieldsIsNull
+            String notPerformIfCustomFieldsIsNull = (String) functionDescriptor.getArgs().get("field.notPerformIfCustomFieldsIsNull");
+            velocityParams.put("notPerformIfCustomFieldsIsNull", notPerformIfCustomFieldsIsNull == null? "" : notPerformIfCustomFieldsIsNull);
+
             // Copy parent fields
             String copyParentFields = (String) functionDescriptor.getArgs().get("field.copyParentFields");
             velocityParams.put("copyParentFields", copyParentFields == null ? "" : copyParentFields);
@@ -301,6 +308,8 @@ public class CreateSubIssueFunctionPluginFactory extends AbstractWorkflowPluginF
         // Original estimate
         velocityParams.put("currentSubIssueOriginalEstimate", "");
         velocityParams.put("timeDurationFormat", getExampleTimeDurationFormat()); // help text
+
+        velocityParams.put("currentNotPerformIfCustomFieldsIsNull", "");
 
         // Copy parent fields
         velocityParams.put("currentCopyParentFields", "");
@@ -403,6 +412,10 @@ public class CreateSubIssueFunctionPluginFactory extends AbstractWorkflowPluginF
             String subIssueOriginalEstimate = (String) functionDescriptor.getArgs().get("field.subIssueOriginalEstimate");
             velocityParams.put("currentSubIssueOriginalEstimate", subIssueOriginalEstimate == null ? "" : subIssueOriginalEstimate);
             velocityParams.put("timeDurationFormat", getExampleTimeDurationFormat()); // help text
+
+            // notPerformIfCustomFieldsIsNull
+            String notPerformIfCustomFieldsIsNull = (String) functionDescriptor.getArgs().get("field.notPerformIfCustomFieldsIsNull");
+            velocityParams.put("currentNotPerformIfCustomFieldsIsNull", notPerformIfCustomFieldsIsNull == null? "" : notPerformIfCustomFieldsIsNull);
 
             // Copy parent fields
             String copyParentFields = (String) functionDescriptor.getArgs().get("field.copyParentFields");

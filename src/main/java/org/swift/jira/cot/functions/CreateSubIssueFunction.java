@@ -29,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.atlassian.jira.bc.issue.search.SearchService;
 import com.atlassian.jira.component.ComponentAccessor;
+import com.atlassian.jira.issue.*;
 import com.atlassian.jira.issue.fields.config.manager.FieldConfigSchemeManager;
 import com.atlassian.jira.issue.issuetype.IssueType;
 import com.atlassian.jira.issue.link.IssueLink;
@@ -52,11 +53,6 @@ import com.atlassian.jira.config.SubTaskManager;
 import com.atlassian.jira.config.properties.APKeys;
 import com.atlassian.jira.config.properties.ApplicationProperties;
 import com.atlassian.jira.exception.CreateException;
-import com.atlassian.jira.issue.CustomFieldManager;
-import com.atlassian.jira.issue.Issue;
-import com.atlassian.jira.issue.IssueFactory;
-import com.atlassian.jira.issue.IssueManager;
-import com.atlassian.jira.issue.MutableIssue;
 import com.atlassian.jira.issue.customfields.CustomFieldType;
 import com.atlassian.jira.issue.fields.CustomField;
 import com.atlassian.jira.issue.index.IndexException;
@@ -153,8 +149,33 @@ public class CreateSubIssueFunction extends AbstractJiraFunctionProvider {
      */
     protected void createSubTask(final Map<String, Object> transientVariables, final Map<String, String> args) {
 
-        Issue originalIssue = getIssue(transientVariables); // issue that initiated the workflow action
-        Issue parentIssue = originalIssue; // parent of subtask normally is the initiating issue, may be adjusted later
+        MutableIssue originalIssue = getIssue(transientVariables); // issue that initiated the workflow action
+        MutableIssue parentIssue = originalIssue; // parent of subtask normally is the initiating issue, may be adjusted later
+
+        // ignore if we found changed fields that were changed to null or not changed at all but were null
+        // first try to find it in modifiedFields. TODO then try to get it from issue
+        String notPerformIfCustomFieldsIsNullRaw = args.get("field.notPerformIfCustomFieldsIsNull");
+        if (!(notPerformIfCustomFieldsIsNullRaw == null || notPerformIfCustomFieldsIsNullRaw.isEmpty())) {
+            Map<String, ModifiedValue> modifiedFields = originalIssue.getModifiedFields();
+            String fields[] = findReplace(notPerformIfCustomFieldsIsNullRaw, parentIssue, originalIssue, null, transientVariables).split(",");
+            for (String name : fields) {
+                CustomField cf = customFieldManager.getCustomFieldObjectByName(name);
+                if (cf != null) {
+                    String innerName = cf.getId();
+                    boolean modifiedIsNull;
+                    boolean issueFieldIsNull;
+                    if (modifiedFields.containsKey(innerName)) {
+                        ModifiedValue mv = modifiedFields.get(innerName);
+                        modifiedIsNull = (mv.getNewValue() == null);
+                        if (modifiedIsNull) return;
+                    } else {
+                        issueFieldIsNull = (originalIssue.getCustomFieldValue(cf) == null);
+                        if (issueFieldIsNull) return;
+                    }
+                }
+            }
+        }
+
 
         final String notPerformJql = args.get("field.notPerformIfJql");
         log.warn("notPerformJql : " + notPerformJql);

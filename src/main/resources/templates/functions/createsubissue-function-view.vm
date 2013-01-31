@@ -28,6 +28,7 @@ A <b>#if (${isSubTask}) Sub-task #else Issue #end</b> of type <b>${subIssueTypeN
 #if (${subIssueDueDate} != "none")<br>Due date will be: <b>${subIssueDueDate}#if (${subIssueDueDate} == "specific due date") (${specificDueDate})#end</b>#if (($dueDateOffset != "0") && ($dueDateOffset.trim() != "")) with offset $dueDateOffset days#end.#end
 #if (${subIssueOriginalEstimate} && (${subIssueOriginalEstimate} != ""))<br>Original estimate will be: <b>${subIssueOriginalEstimate}</b>.#end
 #if (${copyParentFields} && (${copyParentFields} != ""))<br>Parent custom fields to copy to sub-task: <b>${copyParentFields}</b>.#end
+#if (${notPerformIfCustomFieldsIsNull} && (${notPerformIfCustomFieldsIsNull} != ""))<br>notPerformIfCustomFieldsIsNull: <b>${notPerformIfCustomFieldsIsNull}</b> #end
 #if (${customField1Name} && (${customField1Name} != ""))<br>Set custom field: <b>${customField1Name}</b>.#end
 #if (${customField2Name} && (${customField2Name} != ""))<br>Set custom field: <b>${customField2Name}</b>.#end
 #if (${customField3Name} && (${customField3Name} != ""))<br>Set custom field: <b>${customField3Name}</b>.#end

@@ -375,6 +375,27 @@
     </td>
 </tr>
 
+
+
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">notPerformIfCustomFieldsIsNull:</span>
+    </td>
+
+    <td bgcolor="ffffff" nowrap>
+        <table>
+            <tr>
+                <td bgcolor="ffffff" valign="top" nowrap>
+                    <input type="text" size="120" name="notPerformIfCustomFieldsIsNull" value="$currentNotPerformIfCustomFieldsIsNull"/>
+                    <br><font size="1">Works only with enabled on screen fields
+                </font>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+
 <tr bgcolor=ffffff>
     <td align="right" valign="top" bgcolor="fffff0">
         <span class="label">Parent custom fields to copy:</span>
