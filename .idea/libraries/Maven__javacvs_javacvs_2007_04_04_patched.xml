@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: javacvs:javacvs:2007-04-04-patched">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/javacvs/javacvs/2007-04-04-patched/javacvs-2007-04-04-patched.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/javacvs/javacvs/2007-04-04-patched/javacvs-2007-04-04-patched-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/javacvs/javacvs/2007-04-04-patched/javacvs-2007-04-04-patched-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

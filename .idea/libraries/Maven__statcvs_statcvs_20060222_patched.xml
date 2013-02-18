@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: statcvs:statcvs:20060222-patched">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/statcvs/statcvs/20060222-patched/statcvs-20060222-patched.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/statcvs/statcvs/20060222-patched/statcvs-20060222-patched-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/statcvs/statcvs/20060222-patched/statcvs-20060222-patched-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
