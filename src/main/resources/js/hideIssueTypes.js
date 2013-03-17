@@ -1,6 +1,6 @@
 (function () {
     var pattern = "[hide]";
-    var discarded = {}
+    var discarded = {};
     discarded['DocTest'] = true;
     discarded['ProductOwnerReview'] = true;
     discarded['DesignReview'] = true;
@@ -10,10 +10,14 @@
     discarded['MergeToRelease'] = true;
     discarded['IntegrTest'] = true;
     discarded['CreateTechDocument'] = true;
+    discarded['CreateTechDocumentMB'] = true;
+
+    discarded['Epic'] = true;
+    discarded['Story'] = true;
 
     function init(el) {
         jQuery(el).find('option').each(function(k, e) {
-            e = jQuery(e)
+            e = jQuery(e);
             var type = e.text().trim();
             if (discarded[type]) {
                 e.remove();

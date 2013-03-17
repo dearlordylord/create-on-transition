@@ -138,7 +138,7 @@ public class ActionWithLinkedIssuesFunction extends AbstractJiraFunctionProvider
         List<Issue> malyYoba;
         if (inward) malyYoba = lc.getInwardIssues(linkName); else malyYoba = lc.getOutwardIssues(linkName);
         List<Issue> ocheBolshoYoba = malyYoba==null?new ArrayList<Issue>():malyYoba;
-        if (jqlFilter != null && !jqlFilter.isEmpty()) {
+        if (jqlFilter != null && !jqlFilter.isEmpty() && !ocheBolshoYoba.isEmpty()) {
             SearchService.ParseResult pr = searchService.parseQuery(jiraAuthenticationContext.getLoggedInUser(), jqlFilter);
             if (pr.isValid()) {
                 Query q = pr.getQuery();
