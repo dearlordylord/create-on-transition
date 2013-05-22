@@ -13,9 +13,9 @@
     discarded['CreateTechDocumentMB'] = true;
 
     discarded['MegaBug'] = true;
+    discarded['MegaStory'] = true;
 
     discarded['Epic'] = true;
-    discarded['Story'] = true;
 
     function init(el) {
         jQuery(el).find('option').each(function(k, e) {
