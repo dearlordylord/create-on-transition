@@ -12,6 +12,8 @@
     discarded['CreateTechDocument'] = true;
     discarded['CreateTechDocumentMB'] = true;
 
+    discarded['MegaBug'] = true;
+
     discarded['Epic'] = true;
     discarded['Story'] = true;
 
